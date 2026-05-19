@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cyber Anons | $ANONS</title>
+  <meta name="description" content="Cyber Anons — the anonymous army taking over HyperEVM. $ANONS launching on HyperEVM." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--bg:#070d14;--bg2:#0b1220;--bg3:#0f1728;--cyan:#00ecc7;--cyan-dim:rgba(0,236,199,.15);--green:#39ff14;--text:#e8faf8;--muted:#5a8a82;--border:rgba(0,236,199,.14);--border2:rgba(0,236,199,.25)}
+    body{font-family:'Space Grotesk',sans-serif;background-color:var(--bg);color:var(--text);min-height:100vh;background-image:linear-gradient(rgba(0,236,199,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,236,199,.025) 1px,transparent 1px);background-size:40px 40px;-webkit-font-smoothing:antialiased}
+    a{text-decoration:none;color:inherit}
+
+    /* PARTICLES CANVAS */
+    #particles-canvas{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+
+    /* NAV */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;border-bottom:1px solid var(--border);background:rgba(7,13,20,.88);backdrop-filter:blur(12px);height:64px;display:flex;align-items:center}
+    .nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;width:100%;display:flex;align-items:center;justify-content:space-between}
+    .nav-brand{display:flex;align-items:center;gap:12px}
+    .nav-logo{width:32px;height:32px;border-radius:50%;object-fit:cover;border:1px solid rgba(0,236,199,.4);box-shadow:0 0 12px rgba(0,236,199,.4)}
+    .nav-name{font-family:'Space Mono',monospace;font-weight:700;font-size:18px;color:var(--cyan);letter-spacing:.12em}
+    .nav-links{display:flex;align-items:center;gap:12px}
+    .btn-primary{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#00ecc7 0%,#00c4a8 100%);color:#07111e;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.05em;padding:10px 18px;border-radius:6px;border:none;cursor:pointer;font-size:14px;box-shadow:0 0 20px rgba(0,236,199,.35),0 4px 15px rgba(0,236,199,.15);transition:all .2s ease;text-decoration:none}
+    .btn-primary:hover{box-shadow:0 0 30px rgba(0,236,199,.55),0 4px 25px rgba(0,236,199,.25);transform:translateY(-1px)}
+    .btn-outline{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--cyan);border:1px solid rgba(0,236,199,.4);font-family:'Space Mono',monospace;font-weight:600;letter-spacing:.05em;padding:10px 18px;border-radius:6px;cursor:pointer;font-size:14px;transition:all .2s ease;text-decoration:none}
+    .btn-outline:hover{background:rgba(0,236,199,.08);border-color:var(--cyan);box-shadow:0 0 15px rgba(0,236,199,.25)}
+
+    /* TICKER */
+    .ticker{overflow:hidden;background:rgba(0,236,199,.06);border-top:1px solid rgba(0,236,199,.18);border-bottom:1px solid rgba(0,236,199,.18);padding:10px 0;margin-top:64px;position:relative;z-index:1}
+    .ticker-track{display:flex;white-space:nowrap;animation:ticker-scroll 28s linear infinite}
+    .ticker-item{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--cyan);letter-spacing:.18em;padding:0 32px}
+    @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* HERO */
+    .hero{position:relative;min-height:calc(100vh - 64px);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 24px 60px;text-align:center;overflow:hidden;z-index:1}
+    .hero-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 50%,rgba(0,236,199,.07) 0%,transparent 70%)}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;border:1px solid rgba(0,236,199,.3);background:rgba(0,236,199,.05);margin-bottom:36px}
+    .badge-dot{width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse-dot 2s ease-in-out infinite}
+    @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.4}}
+    .badge-text{font-family:'Space Mono',monospace;font-size:12px;font-weight:700;color:var(--cyan);letter-spacing:.18em;text-transform:uppercase}
+    .hero-logo-wrap{position:relative;margin-bottom:40px;animation:float 4s ease-in-out infinite}
+    .hero-logo-glow{position:absolute;inset:0;border-radius:50%;background:rgba(0,236,199,.15);filter:blur(30px);transform:scale(1.5)}
+    .hero-logo-img{position:relative;z-index:1;width:160px;height:160px;border-radius:50%;object-fit:cover;border:2px solid rgba(0,236,199,.4);filter:drop-shadow(0 0 20px rgba(0,236,199,.5)) drop-shadow(0 0 60px rgba(0,236,199,.2))}
+    .cta-logo-img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 32px;display:block;border:2px solid rgba(0,236,199,.4);filter:drop-shadow(0 0 20px rgba(0,236,199,.5))}
+    .footer-logo-img{width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(0,236,199,.4)}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+    .hero-title{font-family:'Space Mono',monospace;font-size:clamp(40px,8vw,80px);font-weight:700;letter-spacing:-.02em;margin-bottom:12px;line-height:1}
+    .text-cyan{color:var(--cyan);text-shadow:0 0 10px rgba(0,236,199,.8),0 0 30px rgba(0,236,199,.4),0 0 60px rgba(0,236,199,.2)}
+    .text-green{color:var(--green);text-shadow:0 0 10px rgba(57,255,20,.8),0 0 30px rgba(57,255,20,.4),0 0 60px rgba(57,255,20,.2)}
+    .hero-ticker{font-family:'Space Mono',monospace;font-size:clamp(20px,3vw,30px);font-weight:700;letter-spacing:.18em;margin-bottom:32px;color:var(--green);text-shadow:0 0 10px rgba(57,255,20,.8),0 0 30px rgba(57,255,20,.4)}
+    .hero-desc{color:var(--muted);font-size:18px;max-width:620px;line-height:1.7;margin-bottom:44px;font-weight:400}
+    .ca-wrap{width:100%;max-width:520px;margin-bottom:40px}
+    .ca-label{font-family:'Space Mono',monospace;font-size:11px;color:rgba(0,236,199,.5);letter-spacing:.18em;text-transform:uppercase;margin-bottom:8px;text-align:left}
+    .ca-box{background:var(--bg2);border:1px solid rgba(0,236,199,.25);border-radius:10px;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .ca-value{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--cyan);letter-spacing:.08em;word-break:break-all}
+    .btn-copy{flex-shrink:0;background:transparent;color:var(--cyan);border:1px solid rgba(0,236,199,.4);font-family:'Space Mono',monospace;font-weight:600;letter-spacing:.05em;padding:7px 14px;border-radius:6px;cursor:pointer;font-size:12px;display:inline-flex;align-items:center;gap:6px;transition:all .2s ease}
+    .btn-copy:hover{background:rgba(0,236,199,.08);border-color:var(--cyan)}
+    .hero-ctas{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+
+    /* SECTIONS */
+    section{border-top:1px solid rgba(0,236,199,.1);position:relative;z-index:1}
+    .section-inner{max-width:1100px;margin:0 auto;padding:80px 24px}
+    .section-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;color:var(--cyan);border:1px solid rgba(0,236,199,.28);padding:5px 14px;border-radius:4px;letter-spacing:.15em;margin-bottom:24px}
+    .section-title{font-family:'Space Mono',monospace;font-size:clamp(26px,4vw,42px);font-weight:700;color:#fff;margin-bottom:16px;line-height:1.2}
+
+    /* STATS */
+    .stats-grid{max-width:1100px;margin:0 auto;padding:60px 24px;display:grid;grid-template-columns:repeat(2,1fr);gap:16px;border-top:1px solid rgba(0,236,199,.1);position:relative;z-index:1}
+    @media(min-width:768px){.stats-grid{grid-template-columns:repeat(4,1fr)}}
+    .stat-card{background:var(--bg2);border:1px solid rgba(0,236,199,.12);border-radius:14px;padding:28px 20px;text-align:center;transition:all .3s ease}
+    .stat-card:hover{border-color:rgba(0,236,199,.35);box-shadow:0 0 20px rgba(0,236,199,.08)}
+    .stat-val{font-family:'Space Mono',monospace;font-size:18px;font-weight:700;margin-bottom:8px}
+    .stat-lbl{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:.14em}
+
+    /* ABOUT */
+    .about-grid{display:flex;flex-direction:column;align-items:center;gap:60px}
+    @media(min-width:768px){.about-grid{flex-direction:row}}
+    .about-text{flex:1}
+    .about-desc{color:var(--muted);line-height:1.8;margin-bottom:16px;font-size:16px}
+    .about-img-wrap{position:relative;flex-shrink:0}
+    .about-img-inner{position:relative;border-radius:16px;border:1px solid rgba(0,236,199,.2);overflow:hidden;background:var(--bg2);padding:8px}
+    .about-img-placeholder{width:260px;height:260px;border-radius:12px;background:linear-gradient(135deg,#0b1a2e 0%,#0f2438 100%);display:flex;flex-direction:column;align-items:center;justify-content:center}
+    @media(min-width:768px){.about-img-placeholder{width:300px;height:300px}}
+    .corner{position:absolute;width:16px;height:16px;border-color:var(--cyan);border-style:solid}
+    .corner-tl{top:0;left:0;border-width:2px 0 0 2px;border-radius:4px 0 0 0}
+    .corner-tr{top:0;right:0;border-width:2px 2px 0 0;border-radius:0 4px 0 0}
+    .corner-bl{bottom:0;left:0;border-width:0 0 2px 2px;border-radius:0 0 0 4px}
+    .corner-br{bottom:0;right:0;border-width:0 2px 2px 0;border-radius:0 0 4px 0}
+
+    /* HOW TO BUY */
+    .steps-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:48px}
+    @media(min-width:768px){.steps-grid{grid-template-columns:repeat(2,1fr)}}
+    .step-card{background:var(--bg2);border:1px solid rgba(0,236,199,.1);border-radius:14px;padding:32px;display:flex;gap:24px;transition:all .3s ease}
+    .step-card:hover{border-color:rgba(0,236,199,.3);box-shadow:0 0 18px rgba(0,236,199,.07)}
+    .step-num{font-family:'Space Mono',monospace;font-size:40px;font-weight:700;color:rgba(0,236,199,.2);line-height:1;flex-shrink:0;transition:color .3s}
+    .step-card:hover .step-num{color:rgba(0,236,199,.35)}
+    .step-title{font-family:'Space Mono',monospace;font-weight:700;color:#fff;font-size:17px;margin-bottom:8px;transition:color .3s}
+    .step-card:hover .step-title{color:var(--cyan)}
+    .step-desc{color:var(--muted);font-size:14px;line-height:1.7}
+
+    /* TOKENOMICS */
+    .tok-grid{display:grid;grid-template-columns:1fr;gap:16px;margin-top:48px}
+    @media(min-width:768px){.tok-grid{grid-template-columns:repeat(3,1fr)}}
+    .tok-card{background:var(--bg2);border:1px solid rgba(0,236,199,.25);border-radius:16px;padding:48px 24px;text-align:center;box-shadow:0 0 10px rgba(0,236,199,.06),inset 0 0 10px rgba(0,236,199,.02);transition:all .3s}
+    .tok-card:hover{box-shadow:0 0 30px rgba(0,236,199,.12)}
+    .tok-val{font-family:'Space Mono',monospace;font-size:clamp(32px,5vw,48px);font-weight:700;margin-bottom:10px}
+    .tok-label{font-weight:700;font-size:18px;color:#fff;margin-bottom:6px}
+    .tok-sub{color:var(--muted);font-size:13px;font-family:'Space Mono',monospace}
+
+    /* CTA */
+    .cta-wrap{max-width:860px;margin:0 auto;padding:80px 24px;text-align:center;position:relative;z-index:1}
+    .cta-box{position:relative;background:var(--bg2);border:1px solid rgba(0,236,199,.2);border-radius:20px;padding:80px 40px;overflow:hidden}
+    .cta-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 50% 50%,rgba(0,236,199,.06) 0%,transparent 70%)}
+    .cta-logo-box{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,#0b1a2e 0%,#0f2438 100%);border:2px solid rgba(0,236,199,.4);filter:drop-shadow(0 0 20px rgba(0,236,199,.5));display:flex;align-items:center;justify-content:center;margin:0 auto 32px}
+    .cta-title{font-family:'Space Mono',monospace;font-size:clamp(24px,4vw,44px);font-weight:700;color:#fff;margin-bottom:20px;line-height:1.2}
+    .cta-desc{color:var(--muted);font-size:17px;max-width:480px;margin:0 auto 40px;line-height:1.7}
+    .cta-btns{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+
+    /* FOOTER */
+    footer{border-top:1px solid rgba(0,236,199,.1);padding:40px 24px;position:relative;z-index:1}
+    .footer-inner{max-width:1100px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:20px}
+    @media(min-width:768px){.footer-inner{flex-direction:row;justify-content:space-between}}
+    .footer-brand{display:flex;align-items:center;gap:10px}
+    .footer-name{font-family:'Space Mono',monospace;color:var(--cyan);font-weight:700;letter-spacing:.12em}
+    .footer-ticker{font-family:'Space Mono',monospace;color:var(--muted);font-size:13px}
+    .footer-copy{color:var(--muted);font-size:12px;font-family:'Space Mono',monospace;text-align:center}
+    .footer-links{display:flex;gap:16px;align-items:center}
+    .footer-link{color:var(--muted);transition:color .2s;display:inline-flex}
+    .footer-link:hover{color:var(--cyan)}
+  </style>
+</head>
+<body>
+
+<canvas id="particles-canvas"></canvas>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="nav-brand">
+      <img src="/logo.jpeg" alt="Cyber Anons" class="nav-logo" />
+      <span class="nav-name">CYBER ANONS</span>
+    </div>
+    <div class="nav-links">
+      <a href="https://x.com/Cyber_Anons" target="_blank" rel="noopener" class="btn-outline">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Twitter
+      </a>
+      <a href="https://t.me/cyberanons" target="_blank" rel="noopener" class="btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Telegram
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span class="ticker-item">&#9670; $ANONS</span><span class="ticker-item">&#9670; CYBER ANONS</span><span class="ticker-item">&#9670; LAUNCHING ON HYPEREVM</span><span class="ticker-item">&#9670; CA: SOON</span><span class="ticker-item">&#9670; JOIN THE ANONS</span><span class="ticker-item">&#9670; HYPEREVM NETWORK</span><span class="ticker-item">&#9670; $ANONS</span><span class="ticker-item">&#9670; CYBER ANONS</span><span class="ticker-item">&#9670; LAUNCHING ON HYPEREVM</span><span class="ticker-item">&#9670; CA: SOON</span><span class="ticker-item">&#9670; JOIN THE ANONS</span><span class="ticker-item">&#9670; HYPEREVM NETWORK</span><span class="ticker-item">&#9670; $ANONS</span><span class="ticker-item">&#9670; CYBER ANONS</span><span class="ticker-item">&#9670; LAUNCHING ON HYPEREVM</span><span class="ticker-item">&#9670; CA: SOON</span><span class="ticker-item">&#9670; JOIN THE ANONS</span><span class="ticker-item">&#9670; HYPEREVM NETWORK</span>
+  </div>
+</div>
+
+<section class="hero" style="border:none;">
+  <div class="hero-glow"></div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:860px;margin:0 auto;">
+    <div class="hero-badge"><span class="badge-dot"></span><span class="badge-text">Launching on HyperEVM</span></div>
+    <div class="hero-logo-wrap">
+      <div class="hero-logo-glow"></div>
+      <img src="/logo.jpeg" alt="Cyber Anons" class="hero-logo-img" />
+    </div>
+    <h1 class="hero-title"><span class="text-cyan">CYBER</span> <span class="text-green">ANONS</span></h1>
+    <div class="hero-ticker">$ANONS</div>
+    <p class="hero-desc">The anonymous army taking over HyperEVM. No faces. No names. Just wallets and chaos. <strong style="color:#e8faf8">$ANONS</strong> launching on HyperEVM — join or get left behind.</p>
+    <div class="ca-wrap">
+      <div class="ca-label">Contract Address</div>
+      <div class="ca-box">
+        <span class="ca-value" id="ca-text">0xCA...SOON</span>
+        <button class="btn-copy" onclick="copyCA()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+          <span id="copy-label">Copy</span>
+        </button>
+      </div>
+    </div>
+    <div class="hero-ctas">
+      <a href="https://t.me/cyberanons" target="_blank" rel="noopener" class="btn-primary" style="font-size:15px;padding:13px 28px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Join Telegram
+      </a>
+      <a href="https://x.com/Cyber_Anons" target="_blank" rel="noopener" class="btn-outline" style="font-size:15px;padding:13px 28px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Follow on X
+      </a>
+    </div>
+  </div>
+</section>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-val" style="color:#00ecc7">1,000,000,000</div><div class="stat-lbl">Total Supply</div></div>
+  <div class="stat-card"><div class="stat-val" style="color:#39ff14">0%</div><div class="stat-lbl">Buy / Sell Tax</div></div>
+  <div class="stat-card"><div class="stat-val" style="color:#00ecc7">&#128293; BURNED</div><div class="stat-lbl">Liquidity</div></div>
+  <div class="stat-card"><div class="stat-val" style="color:#39ff14">REVOKED</div><div class="stat-lbl">Mint Authority</div></div>
+</div>
+
+<section>
+  <div class="section-inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <span class="section-tag">// ABOUT</span>
+        <h2 class="section-title">Who Are the <span class="text-cyan">Cyber Anons</span>?</h2>
+        <p class="about-desc">We are the faceless ones. The ones who move in shadows, speak in code, and strike without warning. No VCs. No pre-sale. No insiders. Just the community and the chain.</p>
+        <p class="about-desc">$ANONS is the battle standard of the anonymous army — launched fair, powered by HyperEVM's blazing speed, and driven by pure decentralized chaos.</p>
+        <p class="about-desc">This isn't just a token. It's a movement. Every wallet is a soldier. Every holder is anonymous. United under one symbol: <strong style="color:#00ecc7">$ANONS</strong>.</p>
+      </div>
+      <div class="about-img-wrap">
+        <div class="about-img-inner">
+          <div class="corner corner-tl"></div><div class="corner corner-tr"></div>
+          <div class="corner corner-bl"></div><div class="corner corner-br"></div>
+          <div class="about-img-placeholder">
+            <span style="font-family:'Space Mono',monospace;font-size:48px;color:#00ecc7;text-shadow:0 0 20px rgba(0,236,199,0.8)">CA</span>
+            <span style="font-family:'Space Mono',monospace;font-size:14px;color:#5a8a82;margin-top:8px">CYBER ANONS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <span class="section-tag">// HOW TO BUY</span>
+    <h2 class="section-title">Get <span class="text-cyan">$ANONS</span> on HyperEVM</h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div>
+          <div class="step-title">Set Up a Wallet</div>
+          <div class="step-desc">Install MetaMask or any EVM-compatible wallet. Add the HyperEVM network (Chain ID: 999) to your wallet settings.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div>
+          <div class="step-title">Get HYPE Tokens</div>
+          <div class="step-desc">Bridge or purchase HYPE tokens — the native token of HyperEVM — to use as gas and for swapping.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div>
+          <div class="step-title">Connect to DEX</div>
+          <div class="step-desc">Head to the official HyperEVM DEX or any supported swap platform. Connect your wallet and paste the $ANONS CA.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <div>
+          <div class="step-title">Swap &amp; Join the Anons</div>
+          <div class="step-desc">Swap HYPE for $ANONS. Set slippage to 1–5% if needed. Welcome to the anonymous army — you're one of us now.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-inner">
+    <span class="section-tag">// TOKENOMICS</span>
+    <h2 class="section-title">Pure. Simple. <span class="text-green">Fair.</span></h2>
+    <div class="tok-grid">
+      <div class="tok-card"><div class="tok-val" style="color:#00ecc7">100%</div><div class="tok-label">Fair Launch</div><div class="tok-sub">Zero pre-sale. Zero VC allocation.</div></div>
+      <div class="tok-card"><div class="tok-val" style="color:#39ff14">0%</div><div class="tok-label">No Tax</div><div class="tok-sub">Buy and sell with zero tax.</div></div>
+      <div class="tok-card"><div class="tok-val" style="color:#00ecc7">1B</div><div class="tok-label">Total Supply</div><div class="tok-sub">1,000,000,000 $ANONS fixed supply.</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-wrap">
+  <div class="cta-box">
+    <div class="cta-glow"></div>
+    <img src="/logo.jpeg" alt="Cyber Anons" class="cta-logo-img" />
+    <h2 class="cta-title">Ready to Go <span class="text-cyan">Anonymous</span>?</h2>
+    <p class="cta-desc">Join thousands of anons already in the trenches. The HyperEVM revolution starts now — don't be the last one in.</p>
+    <div class="cta-btns">
+      <a href="https://t.me/cyberanons" target="_blank" rel="noopener" class="btn-primary" style="font-size:15px;padding:14px 28px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Join Telegram
+      </a>
+      <a href="https://x.com/Cyber_Anons" target="_blank" rel="noopener" class="btn-outline" style="font-size:15px;padding:14px 28px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        Follow on X
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/logo.jpeg" alt="Cyber Anons" class="footer-logo-img" />
+      <span class="footer-name">CYBER ANONS</span>
+      <span class="footer-ticker">$ANONS</span>
+    </div>
+    <div class="footer-copy">© 2025 Cyber Anons · Built on HyperEVM · $ANONS is a community meme token. Not financial advice.</div>
+    <div class="footer-links">
+      <a href="https://x.com/Cyber_Anons" target="_blank" rel="noopener" class="footer-link" title="Twitter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://t.me/cyberanons" target="_blank" rel="noopener" class="footer-link" title="Telegram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== PARTICLE SYSTEM =====
+(function(){
+  var canvas = document.getElementById('particles-canvas');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var COLORS = ['#00ecc7','#00c4a8','#39ff14','rgba(0,236,199,0.5)','rgba(0,196,168,0.4)'];
+
+  function resize(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function spawn(){
+    var n = Math.floor(Math.random()*2)+1;
+    for(var i=0;i<n;i++){
+      var life = 180 + Math.random()*240;
+      particles.push({
+        x: Math.random()*canvas.width,
+        y: Math.random()*canvas.height,
+        vx: (Math.random()-0.5)*0.6,
+        vy: -0.4 - Math.random()*0.8,
+        r: 1 + Math.random()*2.5,
+        alpha: 0,
+        color: COLORS[Math.floor(Math.random()*COLORS.length)],
+        life: 0,
+        maxLife: life
+      });
+    }
+  }
+
+  var frame = 0;
+  function draw(){
+    requestAnimationFrame(draw);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    frame++;
+    if(frame%6===0) spawn();
+
+    for(var i=particles.length-1;i>=0;i--){
+      var p=particles[i];
+      p.x+=p.vx; p.y+=p.vy; p.life++;
+      var prog=p.life/p.maxLife;
+      if(prog<0.15) p.alpha=prog/0.15;
+      else if(prog>0.7) p.alpha=1-(prog-0.7)/0.3;
+      else p.alpha=1;
+      if(p.life>=p.maxLife){particles.splice(i,1);continue;}
+      ctx.save();
+      ctx.globalAlpha=p.alpha*0.7;
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color;
+      ctx.shadowBlur=8;
+      ctx.shadowColor=p.color;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // connecting lines
+    for(var a=0;a<particles.length;a++){
+      for(var b=a+1;b<particles.length;b++){
+        var dx=particles[a].x-particles[b].x;
+        var dy=particles[a].y-particles[b].y;
+        var dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<100){
+          ctx.save();
+          ctx.globalAlpha=(1-dist/100)*0.12*Math.min(particles[a].alpha,particles[b].alpha);
+          ctx.beginPath();
+          ctx.moveTo(particles[a].x,particles[a].y);
+          ctx.lineTo(particles[b].x,particles[b].y);
+          ctx.strokeStyle='#00ecc7';
+          ctx.lineWidth=0.5;
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+    }
+  }
+  draw();
+})();
+
+// ===== COPY CA =====
+function copyCA(){
+  var txt = document.getElementById('ca-text').textContent;
+  var lbl = document.getElementById('copy-label');
+  navigator.clipboard.writeText(txt).catch(function(){});
+  lbl.textContent='Copied!';
+  setTimeout(function(){lbl.textContent='Copy';},2000);
+}
+</script>
+</body>
+</html>
