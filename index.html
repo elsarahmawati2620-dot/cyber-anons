@@ -646,9 +646,10 @@
             <button onclick="pvpCreate()" class="w-full py-3 font-bold rounded-xl text-sm" style="background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.22)">♟ Create Room</button>
             <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full" style="border-top:1px solid rgba(0,0,0,.08)"></div></div><div class="relative flex justify-center"><span class="px-3 text-xs" style="background:#ffffff;color:#94a3b8">or join existing room</span></div></div>
             <div class="flex gap-2">
-              <input id="pvp-join-input" placeholder="Enter 6-letter room code" class="hl-input flex-1 text-sm font-mono uppercase" maxlength="6"/>
+              <input id="pvp-join-input" placeholder="Paste invite link from friend" class="hl-input flex-1 text-sm" style="font-size:12px"/>
               <button onclick="pvpJoin()" class="px-4 py-3 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">Join</button>
             </div>
+            <p class="text-xs" style="color:#94a3b8">Paste the invite link that your friend copied from the "Create Room" screen</p>
             <div id="pvp-err" class="hidden p-3 rounded-xl text-sm" style="background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)"></div>
             <button onclick="backToMenu()" class="w-full py-2 text-sm" style="color:#94a3b8" onmouseover="this.style.color='#8b98b8'" onmouseout="this.style.color='#94a3b8'">← Back to Menu</button>
           </div>
@@ -656,18 +657,22 @@
       </div>
       <div id="pvp-waiting" class="hidden">
         <div class="max-w-md mx-auto hl-card p-8 text-center">
-          <div class="text-5xl mb-4">⏳</div>
-          <h2 class="text-2xl font-black mb-2">Waiting for Opponent</h2>
-          <p class="text-sm mb-5" style="color:#64748b">Share this code with your friend:</p>
-          <div class="rounded-2xl py-6 px-8 mb-4" style="background:rgba(14,165,233,.08);border:2px solid rgba(14,165,233,.25)">
-            <p id="pvp-code-display" class="text-4xl font-black font-mono tracking-widest" style="color:#0ea5e9"></p>
+          <div class="text-5xl mb-4" id="pvp-wait-icon">⏳</div>
+          <h2 class="text-2xl font-black mb-2" id="pvp-wait-title">Waiting for Opponent</h2>
+          <p class="text-sm mb-4" style="color:#64748b" id="pvp-wait-desc">Send this invite link to your friend — they click it to join instantly:</p>
+          <div class="rounded-2xl py-5 px-6 mb-3" style="background:rgba(14,165,233,.08);border:2px solid rgba(14,165,233,.25)">
+            <p id="pvp-code-display" class="text-3xl font-black font-mono tracking-widest mb-1" style="color:#0ea5e9"></p>
+            <p class="text-xs" style="color:#94a3b8">Room ID</p>
           </div>
-          <button id="pvp-copy-btn" onclick="copyCode()" class="px-6 py-2 font-semibold rounded-xl text-sm mb-4" style="background:rgba(14,165,233,.1);color:#0ea5e9">Copy Code</button>
-          <div class="text-sm flex items-center justify-center gap-2 mt-2" style="color:#64748b">
+          <button id="pvp-copy-btn" onclick="copyCode()" class="w-full py-3 font-bold rounded-xl text-sm mb-3" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff">🔗 Copy Invite Link</button>
+          <div class="text-xs p-3 rounded-xl mb-3" style="background:rgba(251,191,36,.06);border:1px solid rgba(251,191,36,.2);color:#d97706">
+            <strong>How it works:</strong> Copy the invite link above → send to friend via WhatsApp/Telegram/DM → they open the link → game starts automatically!
+          </div>
+          <div class="text-sm flex items-center justify-center gap-2 mt-1" style="color:#64748b">
             <div class="w-3 h-3 border-2 rounded-full spin" style="border-color:rgba(14,165,233,.35);border-top-color:#0ea5e9"></div>
             <span id="pvp-wait-status">Setting up room…</span>
           </div>
-          <button onclick="pvpReset();pvpShowLobby();" class="mt-5 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
+          <button onclick="pvpReset();pvpShowLobby();" class="mt-4 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
         </div>
       </div>
       <div id="pvp-game" class="hidden">
@@ -735,8 +740,8 @@ function killAIWorker(){if(_aiWorker){_aiWorker.terminate();_aiWorker=null;}}
 // ══ Config ══
 var TURN_LIMIT=15,CIRC=2*Math.PI*11,STREAK_BONUS=5;
 var POINTS_PER_WIN={easy:15,normal:30,hard:50};
-var MONAD_CHAIN_ID='0x279F';
-var MONAD_PARAMS={chainId:'0x279F',chainName:'Monad Mainnet',nativeCurrency:{name:'MON',symbol:'MON',decimals:18},rpcUrls:['https://rpc.monad.xyz'],blockExplorerUrls:['https://explorer.monad.xyz']};
+var MONAD_CHAIN_ID='0x8F';
+var MONAD_PARAMS={chainId:'0x8F',chainName:'Monad Mainnet',nativeCurrency:{name:'MON',symbol:'MON',decimals:18},rpcUrls:['https://rpc.monad.xyz'],blockExplorerUrls:['https://explorer.monad.xyz']};
 
 // ══ ICE server config for WebRTC (more reliable STUN + TURN) ══
 var ICE_SERVERS=[
@@ -880,7 +885,7 @@ function openBuy(type,id){
 function closeBuyModal(){document.getElementById('modal-buy').classList.add('hidden');}
 
 // USDC contract on Monad — payments go directly to dev wallet
-var USDC_CONTRACT='0x754704bc059f8c67012fed69bc8a327a5aafb603';
+var USDC_CONTRACT='0x754704Bc059F8C67012fEd69BC8A327a5aafb603';
 var USDC_ABI=[{"inputs":[{"name":"to","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}];
 var DEV_WALLET='0xce7132aDA1a06501cA9F5cdf4357eBA3d84A92A1';
 
@@ -1234,21 +1239,14 @@ function backToMenu(){
 }
 
 // ══════════════════════════════════════════════════════════════
-// WebRTC PvP — FIXED for Vercel / static hosting
-// Uses short 6-char room codes as PeerJS IDs for reliable sharing
+// WebRTC PvP — using PeerJS broker UUIDs + URL-based invite link
+// Room code = first 8 chars of broker-assigned UUID (display only)
+// Actual connection uses full UUID so PeerJS never rejects the ID
 // ══════════════════════════════════════════════════════════════
 var peer=null,conn=null,pvpG=null,pvpCol='white',pvpRoom='',pvpHst=[],pvpSel=null,pvpPos=[];
-var _pvpInitTimeout=null;
+var _pvpInitTimeout=null,_pvpFullId='';
 
-// Generate a random 6-character alphanumeric code
-function genRoomCode(){
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var code='';
-  for(var i=0;i<6;i++)code+=chars[Math.floor(Math.random()*chars.length)];
-  return code;
-}
-
-// PeerJS peer config with reliable ICE servers
+// PeerJS peer config — broker-assigned UUID, reliable ICE
 function makePeerConfig(){
   return {
     debug:0,
@@ -1261,11 +1259,12 @@ function makePeerConfig(){
 }
 
 function copyCode(){
-  var txt=document.getElementById('pvp-code-display').textContent;
+  // Copy the share link (URL with ?join= param) so friend can click it directly
+  var shareUrl=window.location.href.split('?')[0]+'?join='+encodeURIComponent(_pvpFullId);
   var btn=document.getElementById('pvp-copy-btn');
-  function done(){if(btn){var orig=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=orig;},2000);}}
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(function(){cbFb(txt);done();});}
-  else{cbFb(txt);done();}
+  function done(){if(btn){var orig=btn.textContent;btn.textContent='✓ Link Copied!';setTimeout(function(){btn.textContent=orig;},2500);}}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(shareUrl).then(done).catch(function(){cbFb(shareUrl);done();});}
+  else{cbFb(shareUrl);done();}
 }
 function cbFb(txt){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
 function startPvP(){document.getElementById('play-menu').classList.add('hidden');document.getElementById('play-ai').classList.add('hidden');document.getElementById('play-pvp').classList.remove('hidden');pvpShowLobby();}
@@ -1276,37 +1275,29 @@ function pvpHideErr(){var el=document.getElementById('pvp-err');if(el)el.classLi
 
 function pvpCreate(){
   pvpReset();
-  pvpRoom=genRoomCode();
   pvpShowWait();
-  document.getElementById('pvp-code-display').textContent=pvpRoom;
-  document.getElementById('pvp-wait-status').textContent='Setting up room…';
+  document.getElementById('pvp-code-display').textContent='…';
+  document.getElementById('pvp-wait-status').textContent='Creating room…';
+  document.getElementById('pvp-copy-btn').textContent='Copy Invite Link';
 
-  // Use the short room code as the PeerJS peer ID directly
-  // Prefix with 'ck-' to namespace and avoid conflicts
-  var peerId='ck-'+pvpRoom.toLowerCase();
-
-  try{
-    peer=new Peer(peerId,makePeerConfig());
-  }catch(e){
-    pvpShowErr('Could not initialize connection. Please try again.');
-    pvpShowLobby();return;
+  try{peer=new Peer(makePeerConfig());}catch(e){
+    pvpShowErr('Could not initialize connection. Please try again.');pvpShowLobby();return;
   }
 
-  // Timeout if PeerJS server never responds
   _pvpInitTimeout=setTimeout(function(){
-    if(peer&&!peer.open){
-      pvpShowErr('Connection to matchmaking server timed out. Check your internet and try again.');
-      pvpReset();pvpShowLobby();
-    }
-  },12000);
+    if(peer&&!peer.open){pvpShowErr('Could not reach matchmaking server. Check your internet and try again.');pvpReset();pvpShowLobby();}
+  },15000);
 
-  peer.on('open',function(){
+  peer.on('open',function(id){
     clearTimeout(_pvpInitTimeout);
-    document.getElementById('pvp-wait-status').textContent='Room ready! Share code with your friend.';
+    _pvpFullId=id;
+    // Display first 8 chars of UUID uppercase as friendly room code
+    pvpRoom=id.replace(/-/g,'').slice(0,8).toUpperCase();
+    document.getElementById('pvp-code-display').textContent=pvpRoom;
+    document.getElementById('pvp-wait-status').textContent='Room ready — share invite link with your friend!';
   });
 
   peer.on('connection',function(c){
-    // Close any existing connection
     if(conn){try{conn.close();}catch(e){}}
     conn=c;
     conn.on('open',function(){
@@ -1316,74 +1307,48 @@ function pvpCreate(){
     });
     conn.on('data',pvpData);
     conn.on('close',pvpDisc);
-    conn.on('error',function(e){pvpSt('Connection error. Opponent may have left.','color:#ef4444');});
+    conn.on('error',function(){pvpSt('Connection error. Opponent may have left.','color:#ef4444');});
   });
 
   peer.on('error',function(e){
     clearTimeout(_pvpInitTimeout);
-    if(e.type==='unavailable-id'){
-      // Room code taken — generate a new one and retry
-      pvpReset();
-      setTimeout(pvpCreate,300);
-      return;
-    }
-    var msg=e.type==='peer-unavailable'?'Opponent not found. Make sure they created the room first.':
-            e.type==='network'?'Network error. Check your internet connection.':
-            e.type==='server-error'?'Matchmaking server error. Please try again in a moment.':
+    var msg=e.type==='network'?'Network error. Check your internet connection.':
+            e.type==='server-error'?'Matchmaking server unavailable. Try again in a moment.':
             'Connection error: '+(e.message||e.type||'unknown');
     pvpShowErr(msg);pvpShowLobby();
   });
 
-  peer.on('disconnected',function(){
-    if(peer&&!peer.destroyed){
-      // Try to reconnect
-      try{peer.reconnect();}catch(ex){}
-    }
-  });
+  peer.on('disconnected',function(){if(peer&&!peer.destroyed){try{peer.reconnect();}catch(ex){}}});
 }
 
-function pvpJoin(){
-  var raw=(document.getElementById('pvp-join-input').value||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
-  if(raw.length<4){pvpShowErr('Enter the room code shared by your friend (at least 4 characters).');return;}
+// Join by full PeerJS UUID (from invite link) or by partial code
+function pvpJoinById(fullId){
   pvpReset();
-  pvpRoom=raw;
+  _pvpFullId=fullId;
+  pvpRoom=fullId.replace(/-/g,'').slice(0,8).toUpperCase();
   document.getElementById('pvp-code-display').textContent=pvpRoom;
   pvpShowWait();
   document.getElementById('pvp-wait-status').textContent='Connecting to room…';
+  document.getElementById('pvp-copy-btn').textContent='Copy Code';
 
-  try{
-    peer=new Peer(undefined,makePeerConfig());
-  }catch(e){
-    pvpShowErr('Could not initialize connection. Please try again.');
-    pvpShowLobby();return;
+  try{peer=new Peer(makePeerConfig());}catch(e){
+    pvpShowErr('Could not initialize connection. Please try again.');pvpShowLobby();return;
   }
 
   _pvpInitTimeout=setTimeout(function(){
-    if(peer&&!peer.open){
-      pvpShowErr('Connection timed out. Check your internet and try again.');
-      pvpReset();pvpShowLobby();
-    }
-  },12000);
+    if(peer&&!peer.open){pvpShowErr('Connection timed out. Check your internet and try again.');pvpReset();pvpShowLobby();}
+  },15000);
 
   peer.on('open',function(){
     clearTimeout(_pvpInitTimeout);
-    // Try connecting using room code as ID (host used prefix 'ck-')
-    var hostId='ck-'+pvpRoom.toLowerCase();
-    document.getElementById('pvp-wait-status').textContent='Connecting to room '+pvpRoom+'…';
-
-    conn=peer.connect(hostId,{reliable:true,serialization:'json'});
+    document.getElementById('pvp-wait-status').textContent='Connecting to opponent…';
+    conn=peer.connect(fullId,{reliable:true,serialization:'json'});
 
     var joinTimeout=setTimeout(function(){
-      if(!conn||!conn.open){
-        pvpShowErr('Room "'+pvpRoom+'" not found. Make sure your friend created the room first, then try again.');
-        pvpReset();pvpShowLobby();
-      }
-    },15000);
+      if(!conn||!conn.open){pvpShowErr('Room not found. Make sure your friend\'s room is still open and try again.');pvpReset();pvpShowLobby();}
+    },20000);
 
-    conn.on('open',function(){
-      clearTimeout(joinTimeout);
-      document.getElementById('pvp-wait-status').textContent='Connected! Waiting for game to start…';
-    });
+    conn.on('open',function(){clearTimeout(joinTimeout);document.getElementById('pvp-wait-status').textContent='Connected! Starting game…';});
     conn.on('data',pvpData);
     conn.on('close',function(){clearTimeout(joinTimeout);pvpDisc();});
     conn.on('error',function(e){clearTimeout(joinTimeout);pvpShowErr('Connection failed: '+(e.message||'unknown error'));pvpShowLobby();});
@@ -1391,11 +1356,23 @@ function pvpJoin(){
 
   peer.on('error',function(e){
     clearTimeout(_pvpInitTimeout);
-    var msg=e.type==='peer-unavailable'?'Room "'+pvpRoom+'" not found. Ask your friend to create a new room.':
+    var msg=e.type==='peer-unavailable'?'Room not found. The host may have closed the room. Ask them to create a new one.':
             e.type==='network'?'Network error. Check your internet connection.':
             'Error: '+(e.message||e.type||'unknown');
     pvpShowErr(msg);pvpShowLobby();
   });
+}
+
+function pvpJoin(){
+  var raw=(document.getElementById('pvp-join-input').value||'').trim();
+  if(!raw){pvpShowErr('Paste the invite link or room code from your friend.');return;}
+  // Accept full URL with ?join= param, full UUID, or short code lookup
+  var urlMatch=raw.match(/[?&]join=([^&]+)/);
+  if(urlMatch){pvpJoinById(decodeURIComponent(urlMatch[1]));return;}
+  // If it looks like a UUID, join directly
+  if(raw.length>12){pvpJoinById(raw);return;}
+  // Short code — can't look up without backend, prompt user
+  pvpShowErr('Please paste the full invite link from your friend (not just the code). Click "Copy Invite Link" on their screen.');
 }
 
 function pvpData(data){
@@ -1501,7 +1478,7 @@ function pvpReset(){
   clearTurnTimer();
   if(conn){try{conn.close();}catch(e){}conn=null;}
   if(peer){try{peer.destroy();}catch(e){}peer=null;}
-  pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];pvpRoom='';
+  pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];pvpRoom='';_pvpFullId='';
 }
 
 function pvpShowErr(msg){
@@ -1517,6 +1494,29 @@ renderShop();
 setDiff('normal');
 initMetaMask();
 renderPoints();
+
+// ── Auto-join from invite URL (?join=PEERID) ──
+(function(){
+  try{
+    var params=new URLSearchParams(window.location.search);
+    var joinId=params.get('join');
+    if(joinId&&joinId.length>10){
+      // Auto navigate to play page and start joining
+      setTimeout(function(){
+        goto('play');
+        setTimeout(function(){
+          startPvP();
+          // Update waiting screen for joiner
+          var title=document.getElementById('pvp-wait-title');
+          var desc=document.getElementById('pvp-wait-desc');
+          if(title)title.textContent='Joining Game…';
+          if(desc)desc.textContent='Connecting to your friend\'s room…';
+          pvpJoinById(joinId);
+        },200);
+      },400);
+    }
+  }catch(ex){}
+})();
 </script>
 
 <!-- ══ LIGHTBOX ══ -->
