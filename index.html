@@ -7,7 +7,7 @@
   <meta name="description" content="Chessio King is the ultimate chess memecoin on Monad Mainnet. Play chess, earn points, convert to $CHESSIO!"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900
     &family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
@@ -777,7 +777,7 @@
             <button onclick="pvpCreate()" class="w-full py-3 font-bold rounded-xl text-sm" style="background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.22)">♟ Create Room</button>
             <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full" style="border-top:1px solid rgba(255,255,255,.08)"></div></div><div class="relative flex justify-center"><span class="px-3 text-xs" style="background:#ffffff;color:#94a3b8">or join existing room</span></div></div>
             <div class="flex gap-2">
-              <input id="pvp-join-input" placeholder="Paste room code here" class="hl-input flex-1 text-sm font-mono" style="text-transform:none"/>
+              <input id="pvp-join-input" placeholder="Enter room code" class="hl-input flex-1 text-sm font-mono uppercase" oninput="this.value=this.value.toUpperCase()"/>
               <button onclick="pvpJoin()" class="px-4 py-3 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">Join</button>
             </div>
             <div id="pvp-err" class="hidden p-3 rounded-xl text-sm" style="background:rgba(239,68,68,.08);color:#ef4444"></div>
@@ -1390,6 +1390,31 @@ function backToMenu(){
 // WebRTC PvP
 // ══════════════════════════════════════════════════════════════
 var peer=null,conn=null,pvpG=null,pvpCol='white',pvpRoom='',pvpHst=[],pvpSel=null,pvpPos=[];
+/* Gun.js for WebRTC signaling — no broker server needed */
+var _gun=null;
+function getGun(){
+  if(!_gun){
+    _gun=Gun([
+      'https://peer.wallie.io/gun',
+      'https://gundb-relay-mlc.glitch.me/gun'
+    ]);
+  }
+  return _gun;
+}
+function pvpSend(data){
+  if(conn&&conn.readyState==='open'){
+    try{conn.send(JSON.stringify(data));}catch(e){}
+  }
+}
+var PVP_ICE={iceServers:[
+  {urls:'stun:stun.l.google.com:19302'},
+  {urls:'stun:stun1.l.google.com:19302'},
+  {urls:'stun:stun2.l.google.com:19302'},
+  {urls:'stun:stun3.l.google.com:19302'},
+  {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
+]};
 
 function copyCode(){
   var txt=document.getElementById('pvp-code-display').textContent;
@@ -1405,76 +1430,106 @@ function pvpShowWait(){['pvp-lobby','pvp-game'].forEach(function(id){document.ge
 function pvpShowGame(){['pvp-lobby','pvp-waiting'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-game').classList.remove('hidden');}
 
 function pvpCreate(){
+  /* Generate short readable room code */
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code='';for(var k=0;k<6;k++)code+=chars[Math.floor(Math.random()*chars.length)];
+  pvpRoom=code;
   pvpShowWait();
-  document.getElementById('pvp-code-display').textContent='…';
-  document.getElementById('pvp-wait-status').textContent='Setting up room…';
-  /* Use broker-assigned ID — custom IDs are often rejected by PeerJS cloud */
-  peer=new Peer(undefined,{debug:1,config:{
-    iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'},
-      {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
-    ],iceTransportPolicy:'all',iceCandidatePoolSize:10
-  }});
-  peer.on('open',function(id){
-    pvpRoom=id;
-    document.getElementById('pvp-code-display').textContent=id;
-    document.getElementById('pvp-wait-status').textContent='Room ready! Share this code with your friend.';
-  });
-  peer.on('connection',function(c){
-    conn=c;
-    conn.on('open',function(){
-      pvpCol='white';pvpG=new Chess();
-      conn.send({type:'start',color:'black',fen:pvpG.fen()});
-      pvpBegin('white');
+  document.getElementById('pvp-code-display').textContent=code;
+  document.getElementById('pvp-wait-status').textContent='Setting up room '+code+'…';
+
+  peer=new RTCPeerConnection(PVP_ICE);
+  conn=peer.createDataChannel('chess',{ordered:true});
+
+  conn.onopen=function(){
+    pvpCol='white';pvpG=new Chess();
+    pvpSend({type:'start',color:'black',fen:pvpG.fen()});
+    pvpBegin('white');
+  };
+  conn.onmessage=function(e){pvpData(JSON.parse(e.data));};
+  conn.onclose=pvpDisc;
+
+  /* Collect all ICE candidates before publishing offer */
+  peer.onicecandidate=function(){};
+  peer.onicegatheringstatechange=function(){};
+
+  peer.createOffer().then(function(offer){
+    return peer.setLocalDescription(offer);
+  }).then(function(){
+    /* Wait for ICE gathering to finish */
+    return new Promise(function(resolve){
+      if(peer.iceGatheringState==='complete'){resolve();return;}
+      peer.onicegatheringstatechange=function(){
+        if(peer.iceGatheringState==='complete')resolve();
+      };
+      setTimeout(resolve,4000); /* max 4s wait */
     });
-    conn.on('data',pvpData);
-    conn.on('close',pvpDisc);
+  }).then(function(){
+    var offerStr=JSON.stringify(peer.localDescription);
+    getGun().get('ckpvp:'+code).put({offer:offerStr,ts:Date.now(),answer:null});
+    document.getElementById('pvp-wait-status').textContent='Room ready! Share code with your friend.';
+
+    /* Listen for answer from joiner */
+    getGun().get('ckpvp:'+code).get('answer').on(function(answerStr){
+      if(!answerStr||!peer||peer.signalingState!=='have-local-offer')return;
+      try{
+        peer.setRemoteDescription(JSON.parse(answerStr)).catch(function(){});
+      }catch(e){}
+    });
+  }).catch(function(e){
+    pvpShowErr('Failed to create room: '+e.message);pvpShowLobby();
   });
-  peer.on('error',function(e){
-    var msg=e.type==='peer-unavailable'?'Friend not found. Make sure they created the room first.':
-            'Connection error: '+e.message;
-    pvpShowErr(msg);pvpShowLobby();
-  });
+
+  peer.on=function(){}; /* stub — not PeerJS */
+  peer.onerror=function(e){pvpShowErr('WebRTC error: '+e.message);pvpShowLobby();};
 }
 
 function pvpJoin(){
-  var code=(document.getElementById('pvp-join-input').value||'').trim();
-  if(code.length<4){pvpShowErr('Enter the room code shared by your friend.');return;}
-  pvpRoom=code;document.getElementById('pvp-code-display').textContent=code;pvpShowWait();
-  document.getElementById('pvp-wait-status').textContent='Connecting to room…';
-  peer=new Peer(undefined,{debug:1,config:{
-    iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'},
-      {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
-    ],iceTransportPolicy:'all',iceCandidatePoolSize:10
-  }});
-  peer.on('open',function(){
-    conn=peer.connect(code,{reliable:true,serialization:'json'});
-    var joinTimeout=setTimeout(function(){
-      if(!conn||!conn.open){
-        pvpShowErr('Could not find room. Make sure your friend created the room first, then try again.');
-        pvpReset();pvpShowLobby();
-      }
-    },15000);
-    conn.on('open',function(){
-      clearTimeout(joinTimeout);
-      document.getElementById('pvp-wait-status').textContent='Connected! Starting game…';
+  var code=(document.getElementById('pvp-join-input').value||'').trim().toUpperCase();
+  if(code.length<4){pvpShowErr('Please enter the room code from your friend.');return;}
+  pvpRoom=code;pvpShowWait();
+  document.getElementById('pvp-code-display').textContent=code;
+  document.getElementById('pvp-wait-status').textContent='Looking for room '+code+'…';
+
+  var joinTimer=setTimeout(function(){
+    pvpShowErr('Room "'+code+'" not found. Make sure your friend clicked "Create Room" first.');
+    pvpReset();pvpShowLobby();
+  },18000);
+
+  /* Fetch host's offer from Gun */
+  var handled=false;
+  getGun().get('ckpvp:'+code).get('offer').on(function(offerStr){
+    if(handled||!offerStr)return;
+    handled=true;clearTimeout(joinTimer);
+    document.getElementById('pvp-wait-status').textContent='Found room! Connecting…';
+
+    peer=new RTCPeerConnection(PVP_ICE);
+    peer.ondatachannel=function(ev){
+      conn=ev.channel;
+      conn.onmessage=function(e){pvpData(JSON.parse(e.data));};
+      conn.onclose=pvpDisc;
+    };
+
+    /* Collect all ICE candidates before publishing answer */
+    peer.setRemoteDescription(JSON.parse(offerStr)).then(function(){
+      return peer.createAnswer();
+    }).then(function(answer){
+      return peer.setLocalDescription(answer);
+    }).then(function(){
+      return new Promise(function(resolve){
+        if(peer.iceGatheringState==='complete'){resolve();return;}
+        peer.onicegatheringstatechange=function(){
+          if(peer.iceGatheringState==='complete')resolve();
+        };
+        setTimeout(resolve,4000);
+      });
+    }).then(function(){
+      var answerStr=JSON.stringify(peer.localDescription);
+      getGun().get('ckpvp:'+code).put({answer:answerStr});
+      document.getElementById('pvp-wait-status').textContent='Answer sent! Waiting for host…';
+    }).catch(function(e){
+      pvpShowErr('Connection failed: '+e.message);pvpShowLobby();
     });
-    conn.on('data',pvpData);
-    conn.on('close',pvpDisc);
-    conn.on('error',function(e){clearTimeout(joinTimeout);pvpShowErr('Connection failed: '+e.message);pvpShowLobby();});
-  });
-  peer.on('error',function(e){
-    var msg=e.type==='peer-unavailable'?'Room not found. Ask your friend to create a new room.':'Error: '+e.message;
-    pvpShowErr(msg);pvpShowLobby();
   });
 }
 
@@ -1500,7 +1555,7 @@ function pvpStartTimer(){
     if(!pvpG||pvpG.game_over())return;if(pvpG.turn()!==myC)return;
     var ms=pvpG.moves();if(!ms.length)return;
     var mv=ms[0|Math.random()*ms.length],r=pvpG.move(mv);
-    if(r){pvpHst.push(r.san);pvpSel=null;pvpPos=[];SFX.autoMove();if(conn&&conn.open)conn.send({type:'auto_move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}
+    if(r){pvpHst.push(r.san);pvpSel=null;pvpPos=[];SFX.autoMove();pvpSend({type:'auto_move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}
   });
 }
 
@@ -1531,7 +1586,7 @@ function onPvPSq(sq){
   }else{
     if(sq===pvpSel){pvpSel=null;pvpPos=[];}
     else{
-      try{var r=pvpG.move({from:pvpSel,to:sq,promotion:'q'});if(r){clearTurnTimer();pvpHst.push(r.san);pvpSel=null;pvpPos=[];playSFX(r,pvpG);if(conn&&conn.open)conn.send({type:'move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();return;}}catch(e){}
+      try{var r=pvpG.move({from:pvpSel,to:sq,promotion:'q'});if(r){clearTurnTimer();pvpHst.push(r.san);pvpSel=null;pvpPos=[];playSFX(r,pvpG);pvpSend({type:'move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();return;}}catch(e){}
       var p2=pvpG.get(sq);
       if(p2&&p2.color===myC){pvpSel=sq;pvpPos=pvpG.moves({square:sq,verbose:true}).map(function(m){return m.to;});}
       else{pvpSel=null;pvpPos=[];}
@@ -1542,8 +1597,8 @@ function onPvPSq(sq){
 
 function pvpReset(){
   clearTurnTimer();
-  if(conn){try{conn.send({type:'resign'});}catch(e){}try{conn.close();}catch(e){}conn=null;}
-  if(peer){try{peer.destroy();}catch(e){}peer=null;}
+  if(conn){try{conn.send(JSON.stringify({type:'resign'}));}catch(e){}try{conn.close();}catch(e){}conn=null;}
+  if(peer){try{peer.close();}catch(e){}peer=null;}
   pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];
   var errEl=document.getElementById('pvp-err');if(errEl)errEl.classList.add('hidden');
 }
