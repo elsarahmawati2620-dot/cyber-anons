@@ -7,7 +7,7 @@
   <meta name="description" content="Chessio King is the ultimate chess memecoin on Monad Mainnet. Play chess, earn points, convert to $CHESSIO!"/>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gun/gun.js"></script>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900
     &family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
@@ -769,36 +769,73 @@
     <!-- PvP -->
     <div id="play-pvp" class="hidden max-w-5xl mx-auto mt-4">
       <div id="pvp-lobby">
-        <div class="max-w-md mx-auto hl-card p-8 text-center">
-          <div class="text-5xl mb-4">🌐</div>
-          <h2 class="text-2xl font-black mb-2">PvP Online</h2>
-          <p class="text-sm mb-6" style="color:#64748b">WebRTC peer-to-peer — 15s timer per turn!</p>
-          <div class="space-y-3">
-            <button onclick="pvpCreate()" class="w-full py-3 font-bold rounded-xl text-sm" style="background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.22)">♟ Create Room</button>
-            <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full" style="border-top:1px solid rgba(255,255,255,.08)"></div></div><div class="relative flex justify-center"><span class="px-3 text-xs" style="background:#ffffff;color:#94a3b8">or join existing room</span></div></div>
-            <div class="flex gap-2">
-              <input id="pvp-join-input" placeholder="Enter room code" class="hl-input flex-1 text-sm font-mono uppercase" oninput="this.value=this.value.toUpperCase()"/>
-              <button onclick="pvpJoin()" class="px-4 py-3 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">Join</button>
+        <div class="max-w-lg mx-auto hl-card p-7 text-center">
+          <div class="text-5xl mb-3">🌐</div>
+          <h2 class="text-2xl font-black mb-1">PvP Online</h2>
+          <p class="text-sm mb-5" style="color:#64748b">Direct WebRTC — exchange codes via Telegram/WhatsApp</p>
+          <!-- Two panels side by side on desktop -->
+          <div class="grid sm:grid-cols-2 gap-4 text-left">
+            <!-- HOST panel -->
+            <div class="rounded-2xl p-4" style="background:rgba(14,165,233,.06);border:1.5px solid rgba(14,165,233,.18)">
+              <p class="font-black text-sm mb-1" style="color:#0ea5e9">🏠 Create Room</p>
+              <p class="text-xs mb-3" style="color:#64748b">You host the game. Share your code with friend.</p>
+              <button onclick="pvpCreate()" class="w-full py-2.5 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff">Generate My Code →</button>
             </div>
-            <div id="pvp-err" class="hidden p-3 rounded-xl text-sm" style="background:rgba(239,68,68,.08);color:#ef4444"></div>
-            <button onclick="backToMenu()" class="w-full py-2 text-sm" style="color:#94a3b8" onmouseover="this.style.color='#8b98b8'" onmouseout="this.style.color='#4a5568'">← Back to Menu</button>
+            <!-- JOINER panel -->
+            <div class="rounded-2xl p-4" style="background:rgba(124,58,237,.06);border:1.5px solid rgba(124,58,237,.18)">
+              <p class="font-black text-sm mb-1" style="color:#7c3aed">🎯 Join Room</p>
+              <p class="text-xs mb-2" style="color:#64748b">Paste the code your friend sent you:</p>
+              <textarea id="pvp-join-input" rows="3" placeholder="Paste friend's code here…" class="hl-input w-full text-xs font-mono mb-2" style="resize:none;font-size:10px"></textarea>
+              <button onclick="pvpJoin()" class="w-full py-2.5 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">Generate Reply →</button>
+            </div>
           </div>
+          <div id="pvp-err" class="hidden p-3 rounded-xl text-sm mt-3" style="background:rgba(239,68,68,.08);color:#ef4444;text-align:left"></div>
+          <p class="text-xs mt-4" style="color:#94a3b8">How it works: Host generates a code → sends to friend → friend generates reply → sends back → connected!</p>
+          <button onclick="backToMenu()" class="mt-4 w-full py-2 text-sm" style="color:#94a3b8">← Back to Menu</button>
         </div>
       </div>
       <div id="pvp-waiting" class="hidden">
-        <div class="max-w-md mx-auto hl-card p-8 text-center">
-          <div class="text-5xl mb-4">⏳</div>
-          <h2 class="text-2xl font-black mb-2">Waiting for Opponent</h2>
-          <p class="text-sm mb-5" style="color:#64748b">Share this code with your friend:</p>
-          <div class="rounded-2xl py-6 px-8 mb-4" style="background:rgba(14,165,233,.08);border:2px solid rgba(14,165,233,.25)">
-            <p id="pvp-code-display" class="text-4xl font-black font-mono tracking-widest" style="color:#0ea5e9"></p>
+        <div class="max-w-lg mx-auto hl-card p-6">
+          <!-- ── HOST: Step 1 show offer ── -->
+          <div id="pvp-host-offer" class="hidden text-center">
+            <div class="text-4xl mb-2">📤</div>
+            <h2 class="text-xl font-black mb-1">Step 1 — Share Your Code</h2>
+            <p class="text-xs mb-3" style="color:#64748b">Copy this and send to your friend via Telegram / WhatsApp / Discord</p>
+            <textarea id="pvp-offer-out" rows="5" readonly class="w-full rounded-xl p-3 text-xs font-mono mb-2" style="background:#f0f9ff;border:2px solid rgba(14,165,233,.25);color:#0369a1;resize:none;word-break:break-all;line-height:1.4"></textarea>
+            <button onclick="pvpCopyOffer()" id="pvp-copy-offer-btn" class="px-5 py-2 font-bold rounded-xl text-sm mb-5" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff">📋 Copy Code</button>
+            <div style="border-top:1px solid rgba(0,0,0,.07)" class="pt-4">
+              <h3 class="text-sm font-black mb-1">Step 2 — Paste Friend's Reply</h3>
+              <p class="text-xs mb-2" style="color:#64748b">When your friend sends their reply code, paste it below:</p>
+              <textarea id="pvp-answer-in" rows="5" placeholder="Paste reply code here…" class="hl-input w-full text-xs font-mono mb-3" style="resize:none;font-size:10px"></textarea>
+              <button onclick="pvpHostConnect()" class="w-full py-3 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#0ea5e9,#0284c7);color:#fff">🔗 Connect & Start Game</button>
+            </div>
           </div>
-          <button onclick="copyCode()" class="px-6 py-2 font-semibold rounded-xl text-sm mb-4" style="background:rgba(14,165,233,.1);color:#0ea5e9">Copy Code</button>
-          <div class="text-sm flex items-center justify-center gap-2 mt-2" style="color:#64748b">
-            <div class="w-3 h-3 border-2 rounded-full spin" style="border-color:rgba(14,165,233,.35);border-top-color:#0ea5e9"></div>
-            <span id="pvp-wait-status"></span>
+          <!-- ── JOINER: show answer ── -->
+          <div id="pvp-join-answer" class="hidden text-center">
+            <div class="text-4xl mb-2">📥</div>
+            <h2 class="text-xl font-black mb-1">Step 2 — Share Your Reply</h2>
+            <p class="text-xs mb-3" style="color:#64748b">Copy this and send it back to your friend</p>
+            <textarea id="pvp-answer-out" rows="5" readonly class="w-full rounded-xl p-3 text-xs font-mono mb-2" style="background:#f5f3ff;border:2px solid rgba(124,58,237,.25);color:#5b21b6;resize:none;word-break:break-all;line-height:1.4"></textarea>
+            <button onclick="pvpCopyAnswer()" id="pvp-copy-answer-btn" class="px-5 py-2 font-bold rounded-xl text-sm mb-4" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">📋 Copy Reply</button>
+            <div class="flex items-center justify-center gap-2 text-sm" style="color:#64748b">
+              <div class="w-3 h-3 border-2 rounded-full spin" style="border-color:rgba(14,165,233,.35);border-top-color:#0ea5e9"></div>
+              <span id="pvp-wait-status">Waiting for your friend to connect…</span>
+            </div>
           </div>
-          <button onclick="pvpReset()" class="mt-5 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
+          <!-- ── CONNECTING / GENERATING ── -->
+          <div id="pvp-connecting" class="hidden text-center py-6">
+            <div class="text-4xl mb-3">⚙️</div>
+            <p class="font-bold mb-3" id="pvp-conn-status">Generating connection code…</p>
+            <div class="flex items-center justify-center gap-2 text-sm" style="color:#64748b">
+              <div class="w-4 h-4 border-2 rounded-full spin" style="border-color:rgba(14,165,233,.35);border-top-color:#0ea5e9"></div>
+              <span>Please wait, gathering network info…</span>
+            </div>
+          </div>
+          <!-- Error -->
+          <div id="pvp-wait-err" class="hidden p-3 rounded-xl text-sm mt-3" style="background:rgba(239,68,68,.08);color:#ef4444"></div>
+          <!-- Legacy hidden elements for compat -->
+          <p id="pvp-code-display" class="hidden"></p>
+          <button onclick="pvpReset()" class="mt-4 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
         </div>
       </div>
       <div id="pvp-game" class="hidden">
@@ -1390,57 +1427,49 @@ function backToMenu(){
 // WebRTC PvP
 // ══════════════════════════════════════════════════════════════
 var peer=null,conn=null,pvpG=null,pvpCol='white',pvpRoom='',pvpHst=[],pvpSel=null,pvpPos=[];
-/* Gun.js for WebRTC signaling — no broker server needed */
-var _gun=null;
-function getGun(){
-  if(!_gun){
-    _gun=Gun([
-      'https://peer.wallie.io/gun',
-      'https://gundb-relay-mlc.glitch.me/gun'
-    ]);
-  }
-  return _gun;
-}
-function pvpSend(data){
-  if(conn&&conn.readyState==='open'){
-    try{conn.send(JSON.stringify(data));}catch(e){}
-  }
-}
+
+/* ── WebRTC ICE config ── */
 var PVP_ICE={iceServers:[
   {urls:'stun:stun.l.google.com:19302'},
   {urls:'stun:stun1.l.google.com:19302'},
   {urls:'stun:stun2.l.google.com:19302'},
   {urls:'stun:stun3.l.google.com:19302'},
   {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-  {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
+  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'}
 ]};
 
-function copyCode(){
-  var txt=document.getElementById('pvp-code-display').textContent;
-  var btn=document.getElementById('pvp-copy-btn');
-  function done(){if(btn){var orig=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=orig;},2000);}}
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(done).catch(function(){cbFb(txt);done();});}
-  else{cbFb(txt);done();}
+function pvpSend(data){
+  if(conn&&conn.readyState==='open'){try{conn.send(JSON.stringify(data));}catch(e){}}
 }
-function cbFb(txt){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
-function startPvP(){document.getElementById('play-menu').classList.add('hidden');document.getElementById('play-ai').classList.add('hidden');document.getElementById('play-pvp').classList.remove('hidden');pvpShowLobby();}
-function pvpShowLobby(){['pvp-waiting','pvp-game'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-lobby').classList.remove('hidden');}
-function pvpShowWait(){['pvp-lobby','pvp-game'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-waiting').classList.remove('hidden');}
-function pvpShowGame(){['pvp-lobby','pvp-waiting'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-game').classList.remove('hidden');}
 
+/* Encode/decode SDP for copy-paste */
+function pvpEncode(desc){return btoa(JSON.stringify({t:desc.type,s:desc.sdp}));}
+function pvpDecode(str){try{var o=JSON.parse(atob(str.trim()));return{type:o.t,sdp:o.s};}catch(e){return null;}}
+
+/* Wait for ICE gathering to complete (max 6s) */
+function pvpWaitICE(pc){
+  return new Promise(function(resolve){
+    if(pc.iceGatheringState==='complete'){resolve();return;}
+    var done=false;
+    function fin(){if(!done){done=true;resolve();}}
+    pc.onicegatheringstatechange=function(){if(pc.iceGatheringState==='complete')fin();};
+    setTimeout(fin,6000);
+  });
+}
+
+function pvpShowConnecting(msg){
+  ['pvp-host-offer','pvp-join-answer'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.classList.add('hidden');
+  });
+  var c2=document.getElementById('pvp-connecting');if(c2)c2.classList.remove('hidden');
+  var s=document.getElementById('pvp-conn-status');if(s)s.textContent=msg||'Generating code…';
+}
+
+/* ── HOST: Create Room ── */
 function pvpCreate(){
-  /* Generate short readable room code */
-  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-  var code='';for(var k=0;k<6;k++)code+=chars[Math.floor(Math.random()*chars.length)];
-  pvpRoom=code;
-  pvpShowWait();
-  document.getElementById('pvp-code-display').textContent=code;
-  document.getElementById('pvp-wait-status').textContent='Setting up room '+code+'…';
-
+  pvpShowWait();pvpShowConnecting('Generating your connection code…');
   peer=new RTCPeerConnection(PVP_ICE);
   conn=peer.createDataChannel('chess',{ordered:true});
-
   conn.onopen=function(){
     pvpCol='white';pvpG=new Chess();
     pvpSend({type:'start',color:'black',fen:pvpG.fen()});
@@ -1448,90 +1477,82 @@ function pvpCreate(){
   };
   conn.onmessage=function(e){pvpData(JSON.parse(e.data));};
   conn.onclose=pvpDisc;
-
-  /* Collect all ICE candidates before publishing offer */
-  peer.onicecandidate=function(){};
-  peer.onicegatheringstatechange=function(){};
-
   peer.createOffer().then(function(offer){
     return peer.setLocalDescription(offer);
   }).then(function(){
-    /* Wait for ICE gathering to finish */
-    return new Promise(function(resolve){
-      if(peer.iceGatheringState==='complete'){resolve();return;}
-      peer.onicegatheringstatechange=function(){
-        if(peer.iceGatheringState==='complete')resolve();
-      };
-      setTimeout(resolve,4000); /* max 4s wait */
-    });
+    return pvpWaitICE(peer);
   }).then(function(){
-    var offerStr=JSON.stringify(peer.localDescription);
-    getGun().get('ckpvp:'+code).put({offer:offerStr,ts:Date.now(),answer:null});
-    document.getElementById('pvp-wait-status').textContent='Room ready! Share code with your friend.';
-
-    /* Listen for answer from joiner */
-    getGun().get('ckpvp:'+code).get('answer').on(function(answerStr){
-      if(!answerStr||!peer||peer.signalingState!=='have-local-offer')return;
-      try{
-        peer.setRemoteDescription(JSON.parse(answerStr)).catch(function(){});
-      }catch(e){}
-    });
+    var code=pvpEncode(peer.localDescription);
+    document.getElementById('pvp-offer-out').value=code;
+    document.getElementById('pvp-connecting').classList.add('hidden');
+    document.getElementById('pvp-host-offer').classList.remove('hidden');
   }).catch(function(e){
-    pvpShowErr('Failed to create room: '+e.message);pvpShowLobby();
+    pvpWaitErr('Failed to generate code: '+e.message);pvpShowLobby();
   });
-
-  peer.on=function(){}; /* stub — not PeerJS */
-  peer.onerror=function(e){pvpShowErr('WebRTC error: '+e.message);pvpShowLobby();};
 }
 
+/* HOST: paste friend's answer and connect */
+function pvpHostConnect(){
+  var raw=(document.getElementById('pvp-answer-in').value||'').trim();
+  var desc=pvpDecode(raw);
+  if(!desc){pvpWaitErr('Invalid code. Make sure you pasted your friend\'s complete reply.');return;}
+  if(!peer){pvpWaitErr('Session expired. Please create a new room.');return;}
+  pvpShowConnecting('Connecting to your friend…');
+  peer.setRemoteDescription(desc).then(function(){
+    document.getElementById('pvp-wait-status').textContent='Establishing connection…';
+  }).catch(function(e){
+    pvpWaitErr('Connection failed: '+e.message);
+  });
+}
+
+/* ── JOINER: paste offer, generate answer ── */
 function pvpJoin(){
-  var code=(document.getElementById('pvp-join-input').value||'').trim().toUpperCase();
-  if(code.length<4){pvpShowErr('Please enter the room code from your friend.');return;}
-  pvpRoom=code;pvpShowWait();
-  document.getElementById('pvp-code-display').textContent=code;
-  document.getElementById('pvp-wait-status').textContent='Looking for room '+code+'…';
-
-  var joinTimer=setTimeout(function(){
-    pvpShowErr('Room "'+code+'" not found. Make sure your friend clicked "Create Room" first.');
-    pvpReset();pvpShowLobby();
-  },18000);
-
-  /* Fetch host's offer from Gun */
-  var handled=false;
-  getGun().get('ckpvp:'+code).get('offer').on(function(offerStr){
-    if(handled||!offerStr)return;
-    handled=true;clearTimeout(joinTimer);
-    document.getElementById('pvp-wait-status').textContent='Found room! Connecting…';
-
-    peer=new RTCPeerConnection(PVP_ICE);
-    peer.ondatachannel=function(ev){
-      conn=ev.channel;
-      conn.onmessage=function(e){pvpData(JSON.parse(e.data));};
-      conn.onclose=pvpDisc;
-    };
-
-    /* Collect all ICE candidates before publishing answer */
-    peer.setRemoteDescription(JSON.parse(offerStr)).then(function(){
-      return peer.createAnswer();
-    }).then(function(answer){
-      return peer.setLocalDescription(answer);
-    }).then(function(){
-      return new Promise(function(resolve){
-        if(peer.iceGatheringState==='complete'){resolve();return;}
-        peer.onicegatheringstatechange=function(){
-          if(peer.iceGatheringState==='complete')resolve();
-        };
-        setTimeout(resolve,4000);
-      });
-    }).then(function(){
-      var answerStr=JSON.stringify(peer.localDescription);
-      getGun().get('ckpvp:'+code).put({answer:answerStr});
-      document.getElementById('pvp-wait-status').textContent='Answer sent! Waiting for host…';
-    }).catch(function(e){
-      pvpShowErr('Connection failed: '+e.message);pvpShowLobby();
-    });
+  var raw=(document.getElementById('pvp-join-input').value||'').trim();
+  var desc=pvpDecode(raw);
+  if(!desc){pvpShowErr('Invalid code. Paste the complete code from your friend.');return;}
+  pvpShowWait();pvpShowConnecting('Generating your reply code…');
+  peer=new RTCPeerConnection(PVP_ICE);
+  peer.ondatachannel=function(ev){
+    conn=ev.channel;
+    conn.onmessage=function(e){pvpData(JSON.parse(e.data));};
+    conn.onclose=pvpDisc;
+  };
+  peer.setRemoteDescription(desc).then(function(){
+    return peer.createAnswer();
+  }).then(function(answer){
+    return peer.setLocalDescription(answer);
+  }).then(function(){
+    return pvpWaitICE(peer);
+  }).then(function(){
+    var code=pvpEncode(peer.localDescription);
+    document.getElementById('pvp-answer-out').value=code;
+    document.getElementById('pvp-wait-status').textContent='Waiting for your friend to connect…';
+    document.getElementById('pvp-connecting').classList.add('hidden');
+    document.getElementById('pvp-join-answer').classList.remove('hidden');
+  }).catch(function(e){
+    pvpWaitErr('Failed to generate reply: '+e.message);pvpShowLobby();
   });
 }
+
+function pvpCopyOffer(){
+  var txt=document.getElementById('pvp-offer-out').value;
+  var btn=document.getElementById('pvp-copy-offer-btn');
+  navigator.clipboard&&navigator.clipboard.writeText(txt).catch(function(){});
+  if(btn){var o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=o;},2000);}
+}
+function pvpCopyAnswer(){
+  var txt=document.getElementById('pvp-answer-out').value;
+  var btn=document.getElementById('pvp-copy-answer-btn');
+  navigator.clipboard&&navigator.clipboard.writeText(txt).catch(function(){});
+  if(btn){var o=btn.textContent;btn.textContent='✓ Copied!';setTimeout(function(){btn.textContent=o;},2000);}
+}
+function pvpWaitErr(msg){
+  var el=document.getElementById('pvp-wait-err');
+  if(el){el.textContent=msg;el.classList.remove('hidden');}
+  document.getElementById('pvp-connecting').classList.add('hidden');
+}
+
+function copyCode(){pvpCopyOffer();}
 
 function pvpData(data){
   if(data.type==='start'){pvpCol=data.color;pvpG=new Chess(data.fen);pvpBegin(data.color);}
@@ -1539,75 +1560,7 @@ function pvpData(data){
   else if(data.type==='resign'){pvpSt('Opponent resigned. You win!','color:#4ade80');clearTurnTimer();}
 }
 function pvpDisc(){pvpSt('Opponent disconnected.','color:#ef4444');clearTurnTimer();document.getElementById('pvp-leave-btn').textContent='Play Again';}
-
-function pvpBegin(col){
-  pvpSel=null;pvpPos=[];pvpHst=[];
-  document.getElementById('pvp-color-badge').textContent='You: '+col;
-  document.getElementById('pvp-room-badge').textContent='Room: '+pvpRoom;
-  document.getElementById('pvp-leave-btn').textContent='Leave Game';
-  pvpShowGame();pvpUpdSt();renderPvPBoard();pvpStartTimer();
-}
-
-function pvpStartTimer(){
-  if(!pvpG||pvpG.game_over()){clearTurnTimer();return;}
-  var myC=pvpCol==='white'?'w':'b';
-  startTurnTimer('pvp',function(){
-    if(!pvpG||pvpG.game_over())return;if(pvpG.turn()!==myC)return;
-    var ms=pvpG.moves();if(!ms.length)return;
-    var mv=ms[0|Math.random()*ms.length],r=pvpG.move(mv);
-    if(r){pvpHst.push(r.san);pvpSel=null;pvpPos=[];SFX.autoMove();pvpSend({type:'auto_move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}
-  });
-}
-
-function pvpUpdSt(){
-  if(!pvpG)return;
-  var my=(pvpG.turn()==='w'&&pvpCol==='white')||(pvpG.turn()==='b'&&pvpCol==='black');
-  var t='',c='color:#0ea5e9';
-  if(pvpG.in_checkmate()){t=my?'You lost! Checkmate.':'You win! Checkmate! 🏆';c=my?'color:#ef4444':'color:#4ade80';clearTurnTimer();}
-  else if(pvpG.in_draw()){t='Draw!';c='color:#fbbf24';clearTurnTimer();}
-  else if(pvpG.in_check()){t=my?'Check! Your turn':'Opponent in check!';}
-  else{t=my?'Your turn!':'Opponent\'s turn…';}
-  pvpSt(t,c);
-}
-function pvpSt(t,c){var el=document.getElementById('pvp-status');el.textContent=t;el.style.cssText='font-weight:700;font-size:1.1rem;'+(c||'color:#0ea5e9');}
-function pvpUpdHst(){
-  var el=document.getElementById('pvp-history');
-  if(!pvpHst.length){el.innerHTML='<p class="text-sm" style="color:#94a3b8">No moves yet</p>';return;}
-  el.innerHTML=pvpHst.map(function(m,i){return '<div class="flex items-center gap-2 text-sm"><span class="text-xs w-6" style="color:#94a3b8">'+(Math.floor(i/2)+1)+(i%2===0?'.':'')+'</span><span class="font-mono font-semibold" style="color:'+(i%2===0?'#f0f4ff':'#0ea5e9')+'">'+m+'</span></div>';}).join('');
-  el.scrollTop=el.scrollHeight;
-}
-function renderPvPBoard(){var el=document.getElementById('pvp-board');if(!pvpG||!el)return;drawBoard(el,pvpG,pvpSel,pvpPos,onPvPSq,pvpCol==='black');}
-
-function onPvPSq(sq){
-  if(!pvpG||pvpG.game_over())return;
-  var myC=pvpCol==='white'?'w':'b';if(pvpG.turn()!==myC)return;
-  if(!pvpSel){
-    var p=pvpG.get(sq);if(p&&p.color===myC){pvpSel=sq;pvpPos=pvpG.moves({square:sq,verbose:true}).map(function(m){return m.to;});}
-  }else{
-    if(sq===pvpSel){pvpSel=null;pvpPos=[];}
-    else{
-      try{var r=pvpG.move({from:pvpSel,to:sq,promotion:'q'});if(r){clearTurnTimer();pvpHst.push(r.san);pvpSel=null;pvpPos=[];playSFX(r,pvpG);pvpSend({type:'move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();return;}}catch(e){}
-      var p2=pvpG.get(sq);
-      if(p2&&p2.color===myC){pvpSel=sq;pvpPos=pvpG.moves({square:sq,verbose:true}).map(function(m){return m.to;});}
-      else{pvpSel=null;pvpPos=[];}
-    }
-  }
-  renderPvPBoard();
-}
-
-function pvpReset(){
-  clearTurnTimer();
-  if(conn){try{conn.send(JSON.stringify({type:'resign'}));}catch(e){}try{conn.close();}catch(e){}conn=null;}
-  if(peer){try{peer.close();}catch(e){}peer=null;}
-  pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];
-  var errEl=document.getElementById('pvp-err');if(errEl)errEl.classList.add('hidden');
-}
-function pvpShowErr(msg){
-  var el=document.getElementById('pvp-err');
-  if(el){
-    el.innerHTML=msg+'<br><span style="font-size:11px;opacity:.8">Tip: Both players must be on same network or use a stable internet connection.</span>';
-    el.classList.remove('hidden');
-  }
+function pvpShowErr(msg){var el=document.getElementById('pvp-err');if(el){el.textContent=msg;el.classList.remove('hidden');}}
 }
 
 // ── Init ──
