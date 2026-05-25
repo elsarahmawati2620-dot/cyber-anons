@@ -9,20 +9,14 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
   <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900
-    &family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
     :root{
-      --hl-bg:#f0f9ff;
-      --hl-bg2:#e0f2fe;
-      --hl-bg3:#ffffff;
-      --hl-primary:#0ea5e9;
-      --hl-primary-hover:#0284c7;
-      --hl-purple:#7c3aed;
-      --hl-purple-hover:#6d28d9;
-      --hl-text:#0f172a;
-      --hl-text2:#475569;
+      --hl-bg:#f0f9ff;--hl-bg2:#e0f2fe;--hl-bg3:#ffffff;
+      --hl-primary:#0ea5e9;--hl-primary-hover:#0284c7;
+      --hl-purple:#7c3aed;--hl-purple-hover:#6d28d9;
+      --hl-text:#0f172a;--hl-text2:#475569;
       --hl-border:rgba(0,0,0,0.08);
       --hl-glass:rgba(255,255,255,0.88);
       --hl-glass2:rgba(14,165,233,0.07);
@@ -147,8 +141,6 @@
     .feature-card:hover{border-color:rgba(14,165,233,.4);transform:translateY(-4px);box-shadow:0 12px 36px rgba(14,165,233,.12)}
     .tg-sticker-btn{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,#229ED9,#1a8bc4);color:#fff;font-weight:800;border:none;border-radius:14px;padding:12px 24px;font-size:.95rem;cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(34,158,217,.3);text-decoration:none}
     .tg-sticker-btn:hover{transform:scale(1.03);box-shadow:0 6px 28px rgba(34,158,217,.5)}
-
-    /* Lightbox */
     #lb-overlay{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s}
     #lb-overlay.open{opacity:1;pointer-events:all}
     #lb-img-wrap{position:relative;max-width:90vw;max-height:90vh;display:flex;align-items:center;justify-content:center}
@@ -228,7 +220,6 @@
     </div>
   </section>
 
-
   <section id="about" class="py-16 px-4 z1">
     <div class="max-w-5xl mx-auto">
       <div class="reveal text-center mb-12">
@@ -253,260 +244,142 @@
         <h2 class="section-title">Token Details</h2>
         <p class="section-sub mt-2">Total Supply: 1,000,000,000 $CHESSIO</p>
       </div>
-
-      <!-- Donut Chart -->
       <div class="reveal max-w-lg mx-auto mt-8 mb-6">
         <div class="hl-card text-center">
           <p class="text-xs uppercase tracking-widest font-semibold mb-6" style="color:#64748b">Token Distribution</p>
           <div class="flex flex-col sm:flex-row items-center justify-center gap-8">
-            <!-- SVG Donut -->
             <div class="relative flex-shrink-0" style="width:200px;height:200px">
               <svg width="200" height="200" viewBox="0 0 140 140">
-                <!-- Background ring -->
                 <circle cx="70" cy="70" r="55" fill="none" stroke="rgba(14,165,233,.1)" stroke-width="22"/>
-                <!-- Community 93% -->
-                <circle id="tok-comm" cx="70" cy="70" r="55" fill="none"
-                  stroke="url(#gradComm)" stroke-width="22" stroke-linecap="butt"
-                  stroke-dasharray="0 345.575" stroke-dashoffset="86.39"
-                  style="transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1);transform:rotate(-90deg);transform-origin:70px 70px"/>
-                <!-- Dev 7% -->
-                <circle id="tok-dev" cx="70" cy="70" r="55" fill="none"
-                  stroke="url(#gradDev)" stroke-width="22" stroke-linecap="butt"
-                  stroke-dasharray="0 345.575" stroke-dashoffset="-234.99"
-                  style="transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1) .1s;transform:rotate(-90deg);transform-origin:70px 70px"/>
+                <circle id="tok-comm" cx="70" cy="70" r="55" fill="none" stroke="url(#gradComm)" stroke-width="22" stroke-linecap="butt" stroke-dasharray="0 345.575" stroke-dashoffset="86.39" style="transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1);transform:rotate(-90deg);transform-origin:70px 70px"/>
+                <circle id="tok-dev" cx="70" cy="70" r="55" fill="none" stroke="url(#gradDev)" stroke-width="22" stroke-linecap="butt" stroke-dasharray="0 345.575" stroke-dashoffset="-234.99" style="transition:stroke-dasharray 1.4s cubic-bezier(.4,0,.2,1) .1s;transform:rotate(-90deg);transform-origin:70px 70px"/>
                 <defs>
-                  <linearGradient id="gradComm" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#0ea5e9"/>
-                    <stop offset="100%" stop-color="#38bdf8"/>
-                  </linearGradient>
-                  <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#7c3aed"/>
-                    <stop offset="100%" stop-color="#a78bfa"/>
-                  </linearGradient>
+                  <linearGradient id="gradComm" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#0ea5e9"/><stop offset="100%" stop-color="#38bdf8"/></linearGradient>
+                  <linearGradient id="gradDev" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#a78bfa"/></linearGradient>
                 </defs>
-                <!-- Center text -->
-                <text x="70" y="63" text-anchor="middle" font-family="Inter,sans-serif" font-weight="900" font-size="20" fill="#0f172a">1B</text>
-                <text x="70" y="80" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="9" fill="#64748b">$CHESSIO</text>
+                <text x="70" y="65" text-anchor="middle" font-size="18" font-weight="900" fill="#0ea5e9">93%</text>
+                <text x="70" y="83" text-anchor="middle" font-size="9" fill="#64748b">Community</text>
               </svg>
             </div>
-            <!-- Legend -->
-            <div class="flex flex-col gap-4 text-left">
-              <div class="flex items-center gap-3">
-                <div class="w-4 h-4 rounded-full flex-shrink-0" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)"></div>
-                <div>
-                  <p class="font-black text-2xl leading-none" style="color:#0ea5e9">93%</p>
-                  <p class="text-xs font-semibold mt-0.5" style="color:#64748b">Community</p>
-                  <p class="text-xs" style="color:#94a3b8">930,000,000 $CHESSIO</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <div class="w-4 h-4 rounded-full flex-shrink-0" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)"></div>
-                <div>
-                  <p class="font-black text-2xl leading-none" style="color:#7c3aed">7%</p>
-                  <p class="text-xs font-semibold mt-0.5" style="color:#64748b">Dev</p>
-                  <p class="text-xs" style="color:#94a3b8">70,000,000 $CHESSIO</p>
-                </div>
-              </div>
+            <div class="text-left space-y-4">
+              <div class="flex items-center gap-3"><div class="w-3 h-3 rounded-sm flex-shrink-0" style="background:linear-gradient(135deg,#0ea5e9,#38bdf8)"></div><div><p class="font-black text-sm">Community — 93%</p><p class="text-xs" style="color:#64748b">930,000,000 $CHESSIO</p><p class="text-xs" style="color:#64748b">Airdrops, rewards, liquidity</p></div></div>
+              <div class="flex items-center gap-3"><div class="w-3 h-3 rounded-sm flex-shrink-0" style="background:linear-gradient(135deg,#7c3aed,#a78bfa)"></div><div><p class="font-black text-sm">Dev & Marketing — 7%</p><p class="text-xs" style="color:#64748b">70,000,000 $CHESSIO</p><p class="text-xs" style="color:#64748b">Development & ecosystem</p></div></div>
             </div>
           </div>
         </div>
       </div>
-      <script>
-      (function(){
-        function animateDonut(){
-          var el=document.getElementById('tok-comm');var el2=document.getElementById('tok-dev');
-          if(!el||!el2)return;
-          el.style.strokeDasharray='321.38 345.57';
-          el2.style.strokeDasharray='24.19 345.57';
-        }
-        var ob=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){animateDonut();ob.disconnect();}});},{threshold:.3});
-        ob.observe(document.getElementById('tok-comm'));
-      })();
-      </script>
-
-      <div class="max-w-lg mx-auto">
-        <div class="reveal hl-card">
-          <div class="divide-y" style="border-color:rgba(0,0,0,.06)">
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Symbol</span><span class="font-black text-sm" style="color:#0ea5e9">$CHESSIO</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Network</span><span class="font-bold text-sm">Monad Mainnet</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Type</span><span class="font-bold text-sm">ERC-20 (Monad)</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Contract</span><span class="font-bold text-sm" style="color:#0ea5e9">Soon</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Launch</span><span class="font-bold text-sm">nad.fun</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Tax</span><span class="font-black text-sm" style="color:#0ea5e9">0%</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Total Supply</span><span class="font-black text-sm">1,000,000,000</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Community</span><span class="font-black text-sm" style="color:#0ea5e9">93%</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Dev</span><span class="font-black text-sm" style="color:#7b61ff">7%</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Liquidity</span><span class="font-black text-sm">Locked</span></div>
-            <div class="flex justify-between items-center py-3"><span class="text-sm" style="color:#64748b">Shop Currency</span><span class="font-black text-sm" style="color:#0ea5e9">USDC (Monad)</span></div>
+      <div class="reveal grid sm:grid-cols-2 gap-4 max-w-lg mx-auto">
+        <div class="hl-card">
+          <p class="text-xs uppercase tracking-widest font-semibold mb-3" style="color:#64748b">Distribution</p>
+          <div class="space-y-3">
+            <div><div class="flex justify-between text-xs mb-1"><span style="color:#64748b">Community</span><span class="font-bold" style="color:#0ea5e9">93%</span></div><div class="tok-bar"><div class="tok-fill" data-width="93" style="background:linear-gradient(90deg,#0ea5e9,#38bdf8)"></div></div></div>
+            <div><div class="flex justify-between text-xs mb-1"><span style="color:#64748b">Dev & Marketing</span><span class="font-bold" style="color:#7c3aed">7%</span></div><div class="tok-bar"><div class="tok-fill" data-width="7" style="background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div></div></div>
+          </div>
+        </div>
+        <div class="hl-card">
+          <p class="text-xs uppercase tracking-widest font-semibold mb-3" style="color:#64748b">Key Info</p>
+          <div class="space-y-2">
+            <div class="flex justify-between text-xs"><span style="color:#64748b">Token Name</span><span class="font-bold">$CHESSIO</span></div>
+            <div class="flex justify-between text-xs"><span style="color:#64748b">Network</span><span class="font-bold" style="color:#0ea5e9">Monad Mainnet</span></div>
+            <div class="flex justify-between text-xs"><span style="color:#64748b">Total Supply</span><span class="font-bold">1,000,000,000</span></div>
+            <div class="flex justify-between text-xs"><span style="color:#64748b">Tax</span><span class="font-bold" style="color:#4ade80">0%</span></div>
+            <div class="flex justify-between text-xs"><span style="color:#64748b">Contract</span><span class="font-bold" style="color:#fbbf24">Soon</span></div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="roadmap" class="py-20 px-4 z1" style="background:rgba(14,165,233,.04)">
+  <!-- ══ ROADMAP ══ -->
+  <section id="roadmap" class="py-16 px-4 z1">
     <div class="max-w-5xl mx-auto">
-      <div class="reveal text-center mb-16">
+      <div class="reveal text-center mb-14">
         <div class="hl-badge mx-auto mb-4" style="width:fit-content">Roadmap</div>
-        <h2 class="section-title">Our Journey</h2>
-        <p class="section-sub mt-2">Our path to becoming the #1 chess memecoin on Monad</p>
+        <h2 class="section-title">The Path to Victory</h2>
+        <p class="section-sub mt-2">From launch to full ecosystem dominance</p>
       </div>
-
       <div class="roadmap-grid">
         <div class="roadmap-connector"></div>
-
-        <!-- Phase 1 — Done -->
         <div class="roadmap-card rm-done reveal">
-          <div class="roadmap-node">✅</div>
-          <div class="rm-card-inner">
-            <p class="text-xs font-bold mb-1" style="color:#0ea5e9;letter-spacing:.1em;text-transform:uppercase">Phase 1</p>
-            <h3 class="text-xl font-black mb-2">Launch</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full mb-4" style="background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.3)">
-              <span style="width:6px;height:6px;border-radius:50%;background:#0ea5e9;display:inline-block"></span>
-              Completed
-            </span>
-            <ul class="space-y-2 text-left">
-              <li class="flex items-start gap-2 text-sm"><span style="color:#0ea5e9;flex-shrink:0;font-weight:900">✓</span><span style="color:#334155">Chess game with AI (3 difficulty levels)</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#0ea5e9;flex-shrink:0;font-weight:900">✓</span><span style="color:#334155">12 collectible skins with rarity bonuses</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#0ea5e9;flex-shrink:0;font-weight:900">✓</span><span style="color:#334155">WebRTC P2P multiplayer</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#0ea5e9;flex-shrink:0;font-weight:900">✓</span><span style="color:#334155">Telegram sticker pack launched</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <!-- Phase 2 — Active -->
-        <div class="roadmap-card rm-active reveal" style="transition-delay:.12s">
           <div class="roadmap-node">🚀</div>
           <div class="rm-card-inner">
-            <p class="text-xs font-bold mb-1" style="color:#fbbf24;letter-spacing:.1em;text-transform:uppercase">Phase 2</p>
-            <h3 class="text-xl font-black mb-2">Growth</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full mb-2" style="background:rgba(251,191,36,.12);color:#fbbf24;border:1px solid rgba(251,191,36,.35)">
-              <span style="width:6px;height:6px;border-radius:50%;background:#fbbf24;display:inline-block;animation:rmPulse 1.2s ease-in-out infinite"></span>
-              In Progress
-            </span>
-            <div class="rm-progress"><div class="rm-progress-fill" data-width="35"></div></div>
-            <ul class="space-y-2 text-left">
-              <li class="flex items-start gap-2 text-sm"><span style="color:#fbbf24;flex-shrink:0;font-weight:900">→</span><span style="color:#334155">Deploy $CHESSIO on Monad via nad.fun</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#fbbf24;flex-shrink:0;font-weight:900">→</span><span style="color:#334155">CEX listings &amp; partnerships</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#fbbf24;flex-shrink:0;font-weight:900">→</span><span style="color:#334155">Community tournaments</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#fbbf24;flex-shrink:0;font-weight:900">→</span><span style="color:#334155">Enhanced leaderboard system</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#fbbf24;flex-shrink:0;font-weight:900">→</span><span style="color:#334155">Mobile-optimized experience</span></li>
-            </ul>
+            <p class="text-xs font-bold mb-1" style="color:#0ea5e9">Phase 1 — Done</p>
+            <h4 class="font-black text-sm mb-2">Launch</h4>
+            <p class="text-xs" style="color:#64748b">Token created, chess game live, skins deployed, community building begins.</p>
           </div>
         </div>
-
-        <!-- Phase 3 — Upcoming -->
-        <div class="roadmap-card rm-upcoming reveal" style="transition-delay:.24s">
-          <div class="roadmap-node">🔮</div>
+        <div class="roadmap-card rm-active reveal" style="transition-delay:.1s">
+          <div class="roadmap-node">⚡</div>
           <div class="rm-card-inner">
-            <p class="text-xs font-bold mb-1" style="color:#7c3aed;letter-spacing:.1em;text-transform:uppercase">Phase 3</p>
-            <h3 class="text-xl font-black mb-2">Ecosystem</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full mb-4" style="background:rgba(124,58,237,.08);color:#7c3aed;border:1px solid rgba(124,58,237,.25)">
-              <span style="width:6px;height:6px;border-radius:50%;background:#7b61ff;display:inline-block"></span>
-              Coming Soon
-            </span>
-            <ul class="space-y-2 text-left">
-              <li class="flex items-start gap-2 text-sm"><span style="color:#7c3aed;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">On-chain point verification</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#7c3aed;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">NFT skin integration</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#7c3aed;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">Cross-chain bridge</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#7c3aed;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">DAO governance for token holders</span></li>
-            </ul>
+            <p class="text-xs font-bold mb-1" style="color:#fbbf24">Phase 2 — Active</p>
+            <h4 class="font-black text-sm mb-2">Growth</h4>
+            <div class="rm-progress"><div class="rm-progress-fill" data-width="62"></div></div>
+            <p class="text-xs" style="color:#64748b">CEX listings, influencer campaigns, P2P tournaments begin, nad.fun listing.</p>
           </div>
         </div>
-
-        <!-- Phase 4 — Future -->
-        <div class="roadmap-card rm-upcoming reveal" style="transition-delay:.36s">
-          <div class="roadmap-node" style="background:rgba(255,255,255,.03);border:2px solid rgba(245,158,11,.25)">✨</div>
-          <div class="rm-card-inner" style="border-color:rgba(245,158,11,.12)">
-            <p class="text-xs font-bold mb-1" style="color:#f59e0b;letter-spacing:.1em;text-transform:uppercase">Phase 4</p>
-            <h3 class="text-xl font-black mb-2">Expansion</h3>
-            <span class="inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1 rounded-full mb-4" style="background:rgba(245,158,11,.08);color:#f59e0b;border:1px solid rgba(245,158,11,.25)">
-              <span style="width:6px;height:6px;border-radius:50%;background:#f59e0b;display:inline-block"></span>
-              Future
-            </span>
-            <ul class="space-y-2 text-left">
-              <li class="flex items-start gap-2 text-sm"><span style="color:#f59e0b;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">$CHESSIO staking &amp; yield rewards</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#f59e0b;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">DAO governance voting for holders</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#f59e0b;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">Cross-game integrations &amp; partnerships</span></li>
-              <li class="flex items-start gap-2 text-sm"><span style="color:#f59e0b;flex-shrink:0;font-weight:900">◎</span><span style="color:#64748b">Global chess tournament with prize pool</span></li>
-            </ul>
+        <div class="roadmap-card rm-upcoming reveal" style="transition-delay:.2s">
+          <div class="roadmap-node">🏆</div>
+          <div class="rm-card-inner">
+            <p class="text-xs font-bold mb-1" style="color:#7c3aed">Phase 3 — Soon</p>
+            <h4 class="font-black text-sm mb-2">Expansion</h4>
+            <p class="text-xs" style="color:#64748b">On-chain tournament system, NFT skins, staking rewards launch.</p>
+          </div>
+        </div>
+        <div class="roadmap-card rm-upcoming reveal" style="transition-delay:.3s">
+          <div class="roadmap-node">👑</div>
+          <div class="rm-card-inner">
+            <p class="text-xs font-bold mb-1" style="color:#7c3aed">Phase 4 — Future</p>
+            <h4 class="font-black text-sm mb-2">Dominance</h4>
+            <p class="text-xs" style="color:#64748b">Mobile app, cross-chain bridge, DAO governance, global chess leagues.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-16 px-4 z1 relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(135deg,rgba(14,165,233,.05),rgba(124,58,237,.05))"></div>
-    <div class="absolute inset-0 pointer-events-none" style="border-top:1px solid rgba(14,165,233,.12);border-bottom:1px solid rgba(14,165,233,.15)"></div>
-    <div class="max-w-2xl mx-auto text-center relative z-10">
-      <div class="reveal">
-        <div class="text-6xl mb-5">♛</div>
-        <h2 class="text-4xl font-black mb-3">Join the Chess Revolution</h2>
-        <p class="mb-8 text-lg" style="color:#64748b">Play. Earn. Convert. The first chess memecoin on Monad awaits you.</p>
-        <div class="flex gap-4 justify-center flex-wrap">
-          <button onclick="goto('play')" class="btn-primary">Play &amp; Earn Now</button>
-          <button onclick="goto('shop')" class="btn-ghost">Browse Skins</button>
-          <a href="https://t.me/addstickers/ChessioKING" target="_blank" rel="noopener noreferrer" class="tg-sticker-btn">🎭 Get Stickers</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-
-  <!-- ══ MEME GALLERY ══ -->
-  <section id="memes" class="py-20 px-4 z1" style="background:rgba(14,165,233,.03)">
+  <!-- ══ MEMES ══ -->
+  <section id="memes" class="py-16 px-4 z1" style="background:rgba(14,165,233,.03)">
     <div class="max-w-5xl mx-auto">
-      <div class="reveal text-center mb-12">
-        <div class="hl-badge mx-auto mb-4" style="width:fit-content">Meme Gallery</div>
-        <h2 class="section-title">Community Memes</h2>
-        <p class="section-sub mt-2 max-w-xl mx-auto">The best Chessio King memes from our community. Click to view full size!</p>
+      <div class="reveal text-center mb-10">
+        <div class="hl-badge mx-auto mb-4" style="width:fit-content">Memes</div>
+        <h2 class="section-title">Meme Gallery</h2>
+        <p class="section-sub mt-2">The finest chess memes in the crypto universe</p>
       </div>
-      <style>
-        .meme-card{border-radius:16px;overflow:hidden;box-shadow:0 4px 16px rgba(14,165,233,.1);transition:all .25s;background:#fff}
-        .meme-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 12px 36px rgba(14,165,233,.18)}
-        .meme-card:hover img{transform:scale(1.04)}
-        .meme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-        @media(max-width:900px){.meme-grid{grid-template-columns:repeat(3,1fr)}}
-        @media(max-width:600px){.meme-grid{grid-template-columns:repeat(2,1fr)}}
-      </style>
-      <div class="meme-grid">
-        <div class="meme-card reveal" style="transition-delay:0.00s;cursor:pointer" onclick="lbOpen(0)"><img src="https://i.imgur.com/tx5UPD3.jpg" alt="Chessio King Meme 1" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.04s;cursor:pointer" onclick="lbOpen(1)"><img src="https://i.imgur.com/P6H9XyW.jpg" alt="Chessio King Meme 2" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.08s;cursor:pointer" onclick="lbOpen(2)"><img src="https://i.imgur.com/EfSOver.jpg" alt="Chessio King Meme 3" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.12s;cursor:pointer" onclick="lbOpen(3)"><img src="https://i.imgur.com/PqCyVAd.jpg" alt="Chessio King Meme 4" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.16s;cursor:pointer" onclick="lbOpen(4)"><img src="https://i.imgur.com/Uijt8HZ.jpg" alt="Chessio King Meme 5" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.20s;cursor:pointer" onclick="lbOpen(5)"><img src="https://i.imgur.com/KzB8l5D.jpg" alt="Chessio King Meme 6" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.24s;cursor:pointer" onclick="lbOpen(6)"><img src="https://i.imgur.com/XQvcpYW.jpg" alt="Chessio King Meme 7" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.28s;cursor:pointer" onclick="lbOpen(7)"><img src="https://i.imgur.com/C0mSA3D.jpg" alt="Chessio King Meme 8" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.32s;cursor:pointer" onclick="lbOpen(8)"><img src="https://i.imgur.com/mT8q6Th.jpg" alt="Chessio King Meme 9" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.36s;cursor:pointer" onclick="lbOpen(9)"><img src="https://i.imgur.com/TWnk83Z.jpg" alt="Chessio King Meme 10" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.40s;cursor:pointer" onclick="lbOpen(10)"><img src="https://i.imgur.com/CYCS0MC.jpg" alt="Chessio King Meme 11" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.44s;cursor:pointer" onclick="lbOpen(11)"><img src="https://i.imgur.com/YgnI7Qj.jpg" alt="Chessio King Meme 12" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.48s;cursor:pointer" onclick="lbOpen(12)"><img src="https://i.imgur.com/e2MiN9X.jpg" alt="Chessio King Meme 13" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.52s;cursor:pointer" onclick="lbOpen(13)"><img src="https://i.imgur.com/Aw6Wlab.jpg" alt="Chessio King Meme 14" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.56s;cursor:pointer" onclick="lbOpen(14)"><img src="https://i.imgur.com/8tNvnQB.jpg" alt="Chessio King Meme 15" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
-        <div class="meme-card reveal" style="transition-delay:0.60s;cursor:pointer" onclick="lbOpen(15)"><img src="https://i.imgur.com/w4e6YWW.jpg" alt="Chessio King Meme 16" loading="lazy" style="width:100%;height:200px;object-fit:cover;border-radius:14px;display:block;transition:transform .25s" onerror="this.parentElement.style.display='none'"></div>
+      <div class="reveal grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <img src="https://i.imgur.com/tx5UPD3.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(0)" alt="meme"/>
+        <img src="https://i.imgur.com/P6H9XyW.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(1)" alt="meme"/>
+        <img src="https://i.imgur.com/EfSOver.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(2)" alt="meme"/>
+        <img src="https://i.imgur.com/PqCyVAd.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(3)" alt="meme"/>
+        <img src="https://i.imgur.com/Uijt8HZ.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(4)" alt="meme"/>
+        <img src="https://i.imgur.com/KzB8l5D.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(5)" alt="meme"/>
+        <img src="https://i.imgur.com/XQvcpYW.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(6)" alt="meme"/>
+        <img src="https://i.imgur.com/C0mSA3D.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(7)" alt="meme"/>
+        <img src="https://i.imgur.com/mT8q6Th.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(8)" alt="meme"/>
+        <img src="https://i.imgur.com/TWnk83Z.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(9)" alt="meme"/>
+        <img src="https://i.imgur.com/CYCS0MC.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(10)" alt="meme"/>
+        <img src="https://i.imgur.com/YgnI7Qj.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(11)" alt="meme"/>
+        <img src="https://i.imgur.com/e2MiN9X.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(12)" alt="meme"/>
+        <img src="https://i.imgur.com/Aw6Wlab.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(13)" alt="meme"/>
+        <img src="https://i.imgur.com/8tNvnQB.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(14)" alt="meme"/>
+        <img src="https://i.imgur.com/w4e6YWW.jpg" class="rounded-2xl w-full aspect-square object-cover cursor-pointer hover:scale-105 transition-transform shadow-md" onclick="lbOpen(15)" alt="meme"/>
       </div>
     </div>
   </section>
 
-  <!-- ══ TELEGRAM STICKER BANNER ══ -->
-  <section class="py-10 px-4 z1 relative">
-    <div class="absolute inset-0 pointer-events-none" style="background:linear-gradient(90deg,rgba(34,158,217,.05),rgba(123,97,255,.05))"></div>
-    <div class="max-w-3xl mx-auto text-center relative z-10 reveal">
-      <div class="glass-bright rounded-3xl p-8" style="border-color:rgba(14,165,233,.3)">
-        <div class="text-5xl mb-4">🎭</div>
-        <h2 class="text-2xl font-black mb-2" style="color:#0f172a">Chessio King Telegram Stickers</h2>
-        <p class="mb-5 text-sm" style="color:#64748b">Express yourself with exclusive Chessio King sticker pack on Telegram. Free to add, forever yours!</p>
-        <a href="https://t.me/addstickers/ChessioKING" target="_blank" rel="noopener noreferrer" class="tg-sticker-btn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
-          Add Stickers on Telegram
-        </a>
-        <p class="mt-4 text-xs" style="color:#64748b">Join our community: <a href="https://t.me/Chessioportal" target="_blank" style="color:#229ED9;text-decoration:none">t.me/Chessioportal</a></p>
-      </div>
+  <!-- ══ STICKERS ══ -->
+  <section class="py-16 px-4 z1">
+    <div class="max-w-lg mx-auto hl-card text-center">
+      <div class="text-5xl mb-5">🎭</div>
+      <h2 class="text-2xl font-black mb-2" style="color:#0f172a">Chessio King Telegram Stickers</h2>
+      <p class="mb-5 text-sm" style="color:#64748b">Express yourself with exclusive Chessio King sticker pack on Telegram. Free to add, forever yours!</p>
+      <a href="https://t.me/addstickers/ChessioKING" target="_blank" rel="noopener noreferrer" class="tg-sticker-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Add Stickers on Telegram
+      </a>
+      <p class="mt-4 text-xs" style="color:#64748b">Join our community: <a href="https://t.me/Chessioportal" target="_blank" style="color:#229ED9;text-decoration:none">t.me/Chessioportal</a></p>
     </div>
   </section>
+
   <footer class="py-10 px-4 z1" style="background:#060810;border-top:1px solid rgba(14,165,233,.15)">
     <div class="max-w-5xl mx-auto">
       <div class="flex flex-col md:flex-row items-center justify-between gap-6">
@@ -543,12 +416,10 @@
       <div class="hl-card mb-8 flex items-center justify-between flex-wrap gap-3">
         <div>
           <p class="text-xs uppercase tracking-widest font-semibold" style="color:#7b61ff">Monad Wallet</p>
-          <p id="shop-wallet-txt" class="font-bold text-sm mt-0.5" style="color:#475569">Not connected — connect wallet to purchase skins with USDC on Monad (Monad)</p>
+          <p id="shop-wallet-txt" class="font-bold text-sm mt-0.5" style="color:#475569">Not connected — connect wallet to purchase skins with USDC on Monad</p>
         </div>
         <button onclick="walletClick()" id="shop-conn-btn" class="px-5 py-2 rounded-xl font-bold text-sm text-white" style="background:linear-gradient(135deg,#7c3aed,#5b21b6)">Connect Wallet</button>
       </div>
-
-      <!-- Rarity bonus legend -->
       <div class="hl-card mb-8" style="background:#fffbeb;border-color:rgba(245,158,11,.2)">
         <p class="text-xs uppercase tracking-widest font-semibold mb-3" style="color:#fbbf24">⭐ Skin Rarity Bonuses — Bonus pts per win (board + piece stack!)</p>
         <div class="flex flex-wrap gap-3">
@@ -560,14 +431,12 @@
         </div>
         <p class="text-xs mt-3" style="color:#64748b">Max possible bonus: <strong style="color:#fbbf24">+100 pts/win</strong> (Legendary board + Legendary piece skin both equipped)</p>
       </div>
-
       <div class="flex items-center gap-3 mb-2">
         <h2 class="text-2xl font-black">Board Skins</h2>
         <span class="hl-badge text-xs">6 designs</span>
       </div>
       <p class="text-sm mb-5" style="color:#64748b">1 free starter • 5 premium from <strong style="color:#0ea5e9">1 USDC</strong> to <strong style="color:#0ea5e9">5 USDC</strong></p>
       <div class="grid sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-12" id="board-skin-cards"></div>
-
       <div class="flex items-center gap-3 mb-2">
         <h2 class="text-2xl font-black">Piece Skins</h2>
         <span class="hl-badge text-xs" style="background:rgba(123,97,255,.1);border-color:rgba(123,97,255,.25);color:#7b61ff">6 styles</span>
@@ -775,13 +644,13 @@
           <p class="text-sm mb-6" style="color:#64748b">WebRTC peer-to-peer — 15s timer per turn!</p>
           <div class="space-y-3">
             <button onclick="pvpCreate()" class="w-full py-3 font-bold rounded-xl text-sm" style="background:rgba(14,165,233,.1);color:#0ea5e9;border:1px solid rgba(14,165,233,.22)">♟ Create Room</button>
-            <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full" style="border-top:1px solid rgba(255,255,255,.08)"></div></div><div class="relative flex justify-center"><span class="px-3 text-xs" style="background:#ffffff;color:#94a3b8">or join existing room</span></div></div>
+            <div class="relative"><div class="absolute inset-0 flex items-center"><div class="w-full" style="border-top:1px solid rgba(0,0,0,.08)"></div></div><div class="relative flex justify-center"><span class="px-3 text-xs" style="background:#ffffff;color:#94a3b8">or join existing room</span></div></div>
             <div class="flex gap-2">
-              <input id="pvp-join-input" placeholder="Paste room code here" class="hl-input flex-1 text-sm font-mono" style="text-transform:none"/>
+              <input id="pvp-join-input" placeholder="Enter 6-letter room code" class="hl-input flex-1 text-sm font-mono uppercase" maxlength="6"/>
               <button onclick="pvpJoin()" class="px-4 py-3 font-bold rounded-xl text-sm" style="background:linear-gradient(135deg,#7c3aed,#5b21b6);color:#fff">Join</button>
             </div>
-            <div id="pvp-err" class="hidden p-3 rounded-xl text-sm" style="background:rgba(239,68,68,.08);color:#ef4444"></div>
-            <button onclick="backToMenu()" class="w-full py-2 text-sm" style="color:#94a3b8" onmouseover="this.style.color='#8b98b8'" onmouseout="this.style.color='#4a5568'">← Back to Menu</button>
+            <div id="pvp-err" class="hidden p-3 rounded-xl text-sm" style="background:rgba(239,68,68,.08);color:#ef4444;border:1px solid rgba(239,68,68,.2)"></div>
+            <button onclick="backToMenu()" class="w-full py-2 text-sm" style="color:#94a3b8" onmouseover="this.style.color='#8b98b8'" onmouseout="this.style.color='#94a3b8'">← Back to Menu</button>
           </div>
         </div>
       </div>
@@ -793,12 +662,12 @@
           <div class="rounded-2xl py-6 px-8 mb-4" style="background:rgba(14,165,233,.08);border:2px solid rgba(14,165,233,.25)">
             <p id="pvp-code-display" class="text-4xl font-black font-mono tracking-widest" style="color:#0ea5e9"></p>
           </div>
-          <button onclick="copyCode()" class="px-6 py-2 font-semibold rounded-xl text-sm mb-4" style="background:rgba(14,165,233,.1);color:#0ea5e9">Copy Code</button>
+          <button id="pvp-copy-btn" onclick="copyCode()" class="px-6 py-2 font-semibold rounded-xl text-sm mb-4" style="background:rgba(14,165,233,.1);color:#0ea5e9">Copy Code</button>
           <div class="text-sm flex items-center justify-center gap-2 mt-2" style="color:#64748b">
             <div class="w-3 h-3 border-2 rounded-full spin" style="border-color:rgba(14,165,233,.35);border-top-color:#0ea5e9"></div>
-            <span id="pvp-wait-status"></span>
+            <span id="pvp-wait-status">Setting up room…</span>
           </div>
-          <button onclick="pvpReset()" class="mt-5 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
+          <button onclick="pvpReset();pvpShowLobby();" class="mt-5 text-sm underline block mx-auto" style="color:#94a3b8">Cancel</button>
         </div>
       </div>
       <div id="pvp-game" class="hidden">
@@ -836,7 +705,7 @@
               <div id="pvp-history" class="move-history space-y-1"><p class="text-sm" style="color:#94a3b8">No moves yet</p></div>
             </div>
             <div class="flex gap-3">
-              <button id="pvp-leave-btn" onclick="pvpReset()" class="flex-1 py-2.5 font-bold rounded-xl text-sm" style="background:rgba(255,255,255,.06);color:#64748b">Leave Game</button>
+              <button id="pvp-leave-btn" onclick="pvpLeave()" class="flex-1 py-2.5 font-bold rounded-xl text-sm" style="background:rgba(255,255,255,.06);color:#64748b">Leave Game</button>
               <button onclick="SFX.toggle()" class="sfx-mute-btn py-2.5 px-3 font-bold rounded-xl text-base" style="background:rgba(255,255,255,.06);color:#64748b">🔊</button>
             </div>
           </div>
@@ -866,8 +735,21 @@ function killAIWorker(){if(_aiWorker){_aiWorker.terminate();_aiWorker=null;}}
 // ══ Config ══
 var TURN_LIMIT=15,CIRC=2*Math.PI*11,STREAK_BONUS=5;
 var POINTS_PER_WIN={easy:15,normal:30,hard:50};
-var MONAD_CHAIN_ID='0x8F';
-var MONAD_PARAMS={chainId:'0x8F',chainName:'Monad',nativeCurrency:{name:'MON',symbol:'MON',decimals:18},rpcUrls:['https://rpc.monad.xyz'],blockExplorerUrls:['https://explorer.monad.xyz']};
+var MONAD_CHAIN_ID='0x279F';
+var MONAD_PARAMS={chainId:'0x279F',chainName:'Monad Mainnet',nativeCurrency:{name:'MON',symbol:'MON',decimals:18},rpcUrls:['https://rpc.monad.xyz'],blockExplorerUrls:['https://explorer.monad.xyz']};
+
+// ══ ICE server config for WebRTC (more reliable STUN + TURN) ══
+var ICE_SERVERS=[
+  {urls:'stun:stun.l.google.com:19302'},
+  {urls:'stun:stun1.l.google.com:19302'},
+  {urls:'stun:stun2.l.google.com:19302'},
+  {urls:'stun:stun3.l.google.com:19302'},
+  {urls:'stun:stun4.l.google.com:19302'},
+  {urls:'stun:stun.cloudflare.com:3478'},
+  {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
+  {urls:'turns:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
+];
 
 // ══ Points ══
 var userPts=0,hardStreak=0,pointsAwarded=false;
@@ -964,15 +846,8 @@ function saveOwned(){
   localStorage.setItem('chessio_eqp_'+walletAddr.toLowerCase(),eqPiece);
 }
 
-function applySq(cell,isLight){
-  var skin=BOARD_SKINS[eqBoard]||BOARD_SKINS.classic;
-  cell.style.background=isLight?skin.light:skin.dark;
-}
-function applyPiece(span,isWhite){
-  var skin=PIECE_SKINS[eqPiece]||PIECE_SKINS.standard;
-  span.style.color=isWhite?skin.wColor:skin.bColor;
-  span.style.textShadow=isWhite?'0 1px 3px rgba(0,0,0,.4)':'0 1px 3px rgba(0,0,0,.6)';
-}
+function applySq(cell,isLight){var skin=BOARD_SKINS[eqBoard]||BOARD_SKINS.classic;cell.style.background=isLight?skin.light:skin.dark;}
+function applyPiece(span,isWhite){var skin=PIECE_SKINS[eqPiece]||PIECE_SKINS.standard;span.style.color=isWhite?skin.wColor:skin.bColor;span.style.textShadow=isWhite?'0 1px 3px rgba(0,0,0,.4)':'0 1px 3px rgba(0,0,0,.6)';}
 
 function rarityColor(r){return{free:'#0ea5e9',common:'#8b98b8',rare:'#7b61ff',epic:'#5eead4',legendary:'#fbbf24'}[r]||'#8b98b8';}
 function rarityLabel(r){return{free:'Free',common:'⭐ Common',rare:'💜 Rare',epic:'💎 Epic',legendary:'🔥 Legendary'}[r]||r;}
@@ -1004,6 +879,7 @@ function openBuy(type,id){
 }
 function closeBuyModal(){document.getElementById('modal-buy').classList.add('hidden');}
 
+// USDC contract on Monad — payments go directly to dev wallet
 var USDC_CONTRACT='0x754704bc059f8c67012fed69bc8a327a5aafb603';
 var USDC_ABI=[{"inputs":[{"name":"to","type":"address"},{"name":"amount","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"}];
 var DEV_WALLET='0xce7132aDA1a06501cA9F5cdf4357eBA3d84A92A1';
@@ -1065,7 +941,6 @@ function renderShop(){
   });
 }
 
-
 // ══ Particles ══
 (function(){
   var c=document.getElementById('particle-canvas');if(!c)return;
@@ -1075,12 +950,7 @@ function renderShop(){
   for(var i=0;i<60;i++)pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5,a:Math.random()});
   function draw(){
     ctx.clearRect(0,0,W,H);
-    pts.forEach(function(p){
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle='rgba(14,165,233,'+(.05+p.a*.05)+')';ctx.fill();
-    });
+    pts.forEach(function(p){p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(14,165,233,'+(.05+p.a*.05)+')';ctx.fill();});
     requestAnimationFrame(draw);
   }
   draw();
@@ -1090,35 +960,18 @@ function renderShop(){
 (function(){
   var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:.05,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
-  // Fallback: ensure nothing stays hidden forever
   setTimeout(function(){document.querySelectorAll('.reveal:not(.visible)').forEach(function(el){el.classList.add('visible');});},1800);
 })();
 
-// ══ Roadmap progress bar animate on scroll ══
+// ══ Roadmap progress bar ══
 (function(){
-  var io3=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        e.target.querySelectorAll('.rm-progress-fill[data-width]').forEach(function(bar){
-          setTimeout(function(){bar.style.width=bar.dataset.width+'%';},300);
-        });
-      }
-    });
-  },{threshold:.2});
+  var io3=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.rm-progress-fill[data-width]').forEach(function(bar){setTimeout(function(){bar.style.width=bar.dataset.width+'%';},300);});}});},{threshold:.2});
   var rmSec=document.getElementById('roadmap');if(rmSec)io3.observe(rmSec);
 })();
 
-// ══ Tok bars animate on scroll ══
+// ══ Tok bars ══
 (function(){
-  var io2=new IntersectionObserver(function(entries){
-    entries.forEach(function(e){
-      if(e.isIntersecting){
-        e.target.querySelectorAll('.tok-fill[data-width]').forEach(function(bar){
-          setTimeout(function(){bar.style.width=bar.dataset.width+'%';},100);
-        });
-      }
-    });
-  },{threshold:.2});
+  var io2=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.querySelectorAll('.tok-fill[data-width]').forEach(function(bar){setTimeout(function(){bar.style.width=bar.dataset.width+'%';},100);});}});},{threshold:.2});
   var tokSec=document.getElementById('tokenomics');if(tokSec)io2.observe(tokSec);
 })();
 
@@ -1126,7 +979,7 @@ function renderShop(){
 var SFX=(function(){
   var ctx=null,muted=false;
   function ac(){if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();return ctx;}
-  function beep(f,d,t){try{var c=ac(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start(c.currentTime);o.stop(c.currentTime+d);}catch(e){}}
+  function beep(f,d){try{var c=ac(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.frequency.value=f;g.gain.setValueAtTime(.15,c.currentTime);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+d);o.start(c.currentTime);o.stop(c.currentTime+d);}catch(e){}}
   return{
     move:function(){if(!muted)beep(440,.08);},
     capture:function(){if(!muted)beep(220,.15);},
@@ -1199,13 +1052,11 @@ function walletClick(){
 function syncWalletUI(addr){
   var s=addr?addr.slice(0,6)+'…'+addr.slice(-4):null,lbl=s||'Connect Wallet';
   ['mm-lbl','mm-lbl2'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=lbl;});
-  var sw=document.getElementById('shop-wallet-txt');if(sw)sw.textContent=addr?'Connected: '+s+' (Monad Mainnet)':'Not connected — connect wallet to purchase skins with USDC on Monad (Monad)';
+  var sw=document.getElementById('shop-wallet-txt');if(sw)sw.textContent=addr?'Connected: '+s+' (Monad Mainnet)':'Not connected — connect wallet to purchase skins with USDC on Monad';
   var cb=document.getElementById('shop-conn-btn');if(cb)cb.textContent=addr?'Disconnect':'Connect Wallet';
 }
 
-// ══════════════════════════════════════════════════════════════
-// BOARD RENDERER
-// ══════════════════════════════════════════════════════════════
+// ══ BOARD RENDERER ══
 var PU={wk:'♔',wq:'♕',wr:'♖',wb:'♗',wn:'♘',wp:'♙',bk:'♚',bq:'♛',br:'♜',bb:'♝',bn:'♞',bp:'♟'};
 var FL=['a','b','c','d','e','f','g','h'],RK=[8,7,6,5,4,3,2,1];
 function sqN(c,r){return FL[c]+RK[r];}
@@ -1226,9 +1077,7 @@ function drawBoard(el,game,selSq,posSqs,cb,flip){
   }}
 }
 
-// ══════════════════════════════════════════════════════════════
-// TURN TIMER
-// ══════════════════════════════════════════════════════════════
+// ══ TURN TIMER ══
 var _timerInterval=null,_timerCount=0,_timerMode='ai';
 function startTurnTimer(mode,onExpire){
   clearTurnTimer();_timerMode=mode;_timerCount=TURN_LIMIT;_updateTimerUI(mode,TURN_LIMIT);
@@ -1250,9 +1099,7 @@ function _updateTimerUI(mode,secs){
 }
 function resetTimerUI(mode){_updateTimerUI(mode,TURN_LIMIT);var s=document.getElementById(mode+'-timer-skipped');if(s)s.classList.add('hidden');}
 
-// ══════════════════════════════════════════════════════════════
-// AI GAME
-// ══════════════════════════════════════════════════════════════
+// ══ AI GAME ══
 var aig=null,aiDf='normal',aiSel=null,aiPos=[],aiTh=false,aiHst=[];
 
 function setDiff(d){
@@ -1387,9 +1234,31 @@ function backToMenu(){
 }
 
 // ══════════════════════════════════════════════════════════════
-// WebRTC PvP
+// WebRTC PvP — FIXED for Vercel / static hosting
+// Uses short 6-char room codes as PeerJS IDs for reliable sharing
 // ══════════════════════════════════════════════════════════════
 var peer=null,conn=null,pvpG=null,pvpCol='white',pvpRoom='',pvpHst=[],pvpSel=null,pvpPos=[];
+var _pvpInitTimeout=null;
+
+// Generate a random 6-character alphanumeric code
+function genRoomCode(){
+  var chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  var code='';
+  for(var i=0;i<6;i++)code+=chars[Math.floor(Math.random()*chars.length)];
+  return code;
+}
+
+// PeerJS peer config with reliable ICE servers
+function makePeerConfig(){
+  return {
+    debug:0,
+    config:{
+      iceServers:ICE_SERVERS,
+      iceTransportPolicy:'all',
+      iceCandidatePoolSize:10
+    }
+  };
+}
 
 function copyCode(){
   var txt=document.getElementById('pvp-code-display').textContent;
@@ -1400,31 +1269,45 @@ function copyCode(){
 }
 function cbFb(txt){var ta=document.createElement('textarea');ta.value=txt;ta.style.cssText='position:fixed;opacity:0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}document.body.removeChild(ta);}
 function startPvP(){document.getElementById('play-menu').classList.add('hidden');document.getElementById('play-ai').classList.add('hidden');document.getElementById('play-pvp').classList.remove('hidden');pvpShowLobby();}
-function pvpShowLobby(){['pvp-waiting','pvp-game'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-lobby').classList.remove('hidden');}
+function pvpShowLobby(){['pvp-waiting','pvp-game'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-lobby').classList.remove('hidden');pvpHideErr();}
 function pvpShowWait(){['pvp-lobby','pvp-game'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-waiting').classList.remove('hidden');}
 function pvpShowGame(){['pvp-lobby','pvp-waiting'].forEach(function(id){document.getElementById(id).classList.add('hidden');});document.getElementById('pvp-game').classList.remove('hidden');}
+function pvpHideErr(){var el=document.getElementById('pvp-err');if(el)el.classList.add('hidden');}
 
 function pvpCreate(){
+  pvpReset();
+  pvpRoom=genRoomCode();
   pvpShowWait();
-  document.getElementById('pvp-code-display').textContent='…';
+  document.getElementById('pvp-code-display').textContent=pvpRoom;
   document.getElementById('pvp-wait-status').textContent='Setting up room…';
-  /* Use broker-assigned ID — custom IDs are often rejected by PeerJS cloud */
-  peer=new Peer(undefined,{debug:1,config:{
-    iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'},
-      {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
-    ],iceTransportPolicy:'all',iceCandidatePoolSize:10
-  }});
-  peer.on('open',function(id){
-    pvpRoom=id;
-    document.getElementById('pvp-code-display').textContent=id;
-    document.getElementById('pvp-wait-status').textContent='Room ready! Share this code with your friend.';
+
+  // Use the short room code as the PeerJS peer ID directly
+  // Prefix with 'ck-' to namespace and avoid conflicts
+  var peerId='ck-'+pvpRoom.toLowerCase();
+
+  try{
+    peer=new Peer(peerId,makePeerConfig());
+  }catch(e){
+    pvpShowErr('Could not initialize connection. Please try again.');
+    pvpShowLobby();return;
+  }
+
+  // Timeout if PeerJS server never responds
+  _pvpInitTimeout=setTimeout(function(){
+    if(peer&&!peer.open){
+      pvpShowErr('Connection to matchmaking server timed out. Check your internet and try again.');
+      pvpReset();pvpShowLobby();
+    }
+  },12000);
+
+  peer.on('open',function(){
+    clearTimeout(_pvpInitTimeout);
+    document.getElementById('pvp-wait-status').textContent='Room ready! Share code with your friend.';
   });
+
   peer.on('connection',function(c){
+    // Close any existing connection
+    if(conn){try{conn.close();}catch(e){}}
     conn=c;
     conn.on('open',function(){
       pvpCol='white';pvpG=new Chess();
@@ -1433,61 +1316,106 @@ function pvpCreate(){
     });
     conn.on('data',pvpData);
     conn.on('close',pvpDisc);
+    conn.on('error',function(e){pvpSt('Connection error. Opponent may have left.','color:#ef4444');});
   });
+
   peer.on('error',function(e){
-    var msg=e.type==='peer-unavailable'?'Friend not found. Make sure they created the room first.':
-            'Connection error: '+e.message;
+    clearTimeout(_pvpInitTimeout);
+    if(e.type==='unavailable-id'){
+      // Room code taken — generate a new one and retry
+      pvpReset();
+      setTimeout(pvpCreate,300);
+      return;
+    }
+    var msg=e.type==='peer-unavailable'?'Opponent not found. Make sure they created the room first.':
+            e.type==='network'?'Network error. Check your internet connection.':
+            e.type==='server-error'?'Matchmaking server error. Please try again in a moment.':
+            'Connection error: '+(e.message||e.type||'unknown');
     pvpShowErr(msg);pvpShowLobby();
+  });
+
+  peer.on('disconnected',function(){
+    if(peer&&!peer.destroyed){
+      // Try to reconnect
+      try{peer.reconnect();}catch(ex){}
+    }
   });
 }
 
 function pvpJoin(){
-  var code=(document.getElementById('pvp-join-input').value||'').trim();
-  if(code.length<4){pvpShowErr('Enter the room code shared by your friend.');return;}
-  pvpRoom=code;document.getElementById('pvp-code-display').textContent=code;pvpShowWait();
+  var raw=(document.getElementById('pvp-join-input').value||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'');
+  if(raw.length<4){pvpShowErr('Enter the room code shared by your friend (at least 4 characters).');return;}
+  pvpReset();
+  pvpRoom=raw;
+  document.getElementById('pvp-code-display').textContent=pvpRoom;
+  pvpShowWait();
   document.getElementById('pvp-wait-status').textContent='Connecting to room…';
-  peer=new Peer(undefined,{debug:1,config:{
-    iceServers:[
-      {urls:'stun:stun.l.google.com:19302'},
-      {urls:'stun:stun1.l.google.com:19302'},
-      {urls:'stun:stun2.l.google.com:19302'},
-      {urls:'turn:openrelay.metered.ca:80',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443',username:'openrelayproject',credential:'openrelayproject'},
-      {urls:'turn:openrelay.metered.ca:443?transport=tcp',username:'openrelayproject',credential:'openrelayproject'}
-    ],iceTransportPolicy:'all',iceCandidatePoolSize:10
-  }});
+
+  try{
+    peer=new Peer(undefined,makePeerConfig());
+  }catch(e){
+    pvpShowErr('Could not initialize connection. Please try again.');
+    pvpShowLobby();return;
+  }
+
+  _pvpInitTimeout=setTimeout(function(){
+    if(peer&&!peer.open){
+      pvpShowErr('Connection timed out. Check your internet and try again.');
+      pvpReset();pvpShowLobby();
+    }
+  },12000);
+
   peer.on('open',function(){
-    conn=peer.connect(code,{reliable:true,serialization:'json'});
+    clearTimeout(_pvpInitTimeout);
+    // Try connecting using room code as ID (host used prefix 'ck-')
+    var hostId='ck-'+pvpRoom.toLowerCase();
+    document.getElementById('pvp-wait-status').textContent='Connecting to room '+pvpRoom+'…';
+
+    conn=peer.connect(hostId,{reliable:true,serialization:'json'});
+
     var joinTimeout=setTimeout(function(){
       if(!conn||!conn.open){
-        pvpShowErr('Could not find room. Make sure your friend created the room first, then try again.');
+        pvpShowErr('Room "'+pvpRoom+'" not found. Make sure your friend created the room first, then try again.');
         pvpReset();pvpShowLobby();
       }
     },15000);
+
     conn.on('open',function(){
       clearTimeout(joinTimeout);
-      document.getElementById('pvp-wait-status').textContent='Connected! Starting game…';
+      document.getElementById('pvp-wait-status').textContent='Connected! Waiting for game to start…';
     });
     conn.on('data',pvpData);
-    conn.on('close',pvpDisc);
-    conn.on('error',function(e){clearTimeout(joinTimeout);pvpShowErr('Connection failed: '+e.message);pvpShowLobby();});
+    conn.on('close',function(){clearTimeout(joinTimeout);pvpDisc();});
+    conn.on('error',function(e){clearTimeout(joinTimeout);pvpShowErr('Connection failed: '+(e.message||'unknown error'));pvpShowLobby();});
   });
+
   peer.on('error',function(e){
-    var msg=e.type==='peer-unavailable'?'Room not found. Ask your friend to create a new room.':'Error: '+e.message;
+    clearTimeout(_pvpInitTimeout);
+    var msg=e.type==='peer-unavailable'?'Room "'+pvpRoom+'" not found. Ask your friend to create a new room.':
+            e.type==='network'?'Network error. Check your internet connection.':
+            'Error: '+(e.message||e.type||'unknown');
     pvpShowErr(msg);pvpShowLobby();
   });
 }
 
 function pvpData(data){
   if(data.type==='start'){pvpCol=data.color;pvpG=new Chess(data.fen);pvpBegin(data.color);}
-  else if((data.type==='move'||data.type==='auto_move')&&pvpG){var r=pvpG.move(data.move);if(r){pvpHst.push(r.san);playSFX(r,pvpG);pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}}
-  else if(data.type==='resign'){pvpSt('Opponent resigned. You win!','color:#4ade80');clearTurnTimer();}
+  else if((data.type==='move'||data.type==='auto_move')&&pvpG){
+    var r=pvpG.move(data.move);
+    if(r){pvpHst.push(r.san);playSFX(r,pvpG);pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}
+  }
+  else if(data.type==='resign'){pvpSt('Opponent resigned. You win! 🏆','color:#4ade80');clearTurnTimer();}
 }
-function pvpDisc(){pvpSt('Opponent disconnected.','color:#ef4444');clearTurnTimer();document.getElementById('pvp-leave-btn').textContent='Play Again';}
+
+function pvpDisc(){
+  pvpSt('Opponent disconnected.','color:#ef4444');
+  clearTurnTimer();
+  var lb=document.getElementById('pvp-leave-btn');if(lb)lb.textContent='Back to Menu';
+}
 
 function pvpBegin(col){
   pvpSel=null;pvpPos=[];pvpHst=[];
-  document.getElementById('pvp-color-badge').textContent='You: '+col;
+  document.getElementById('pvp-color-badge').textContent='You: '+(col==='white'?'♔ White':'♚ Black');
   document.getElementById('pvp-room-badge').textContent='Room: '+pvpRoom;
   document.getElementById('pvp-leave-btn').textContent='Leave Game';
   pvpShowGame();pvpUpdSt();renderPvPBoard();pvpStartTimer();
@@ -1496,27 +1424,39 @@ function pvpBegin(col){
 function pvpStartTimer(){
   if(!pvpG||pvpG.game_over()){clearTurnTimer();return;}
   var myC=pvpCol==='white'?'w':'b';
+  var isMyTurn=pvpG.turn()===myC;
+  if(!isMyTurn)return; // Only start timer when it's our turn
   startTurnTimer('pvp',function(){
-    if(!pvpG||pvpG.game_over())return;if(pvpG.turn()!==myC)return;
+    if(!pvpG||pvpG.game_over())return;
+    if(pvpG.turn()!==myC)return;
+    // Auto-move on timeout
     var ms=pvpG.moves();if(!ms.length)return;
     var mv=ms[0|Math.random()*ms.length],r=pvpG.move(mv);
-    if(r){pvpHst.push(r.san);pvpSel=null;pvpPos=[];SFX.autoMove();if(conn&&conn.open)conn.send({type:'auto_move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();}
+    if(r){pvpHst.push(r.san);pvpSel=null;pvpPos=[];SFX.autoMove();if(conn&&conn.open)conn.send({type:'auto_move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();}
   });
 }
 
 function pvpUpdSt(){
   if(!pvpG)return;
-  var my=(pvpG.turn()==='w'&&pvpCol==='white')||(pvpG.turn()==='b'&&pvpCol==='black');
+  var myC=pvpCol==='white'?'w':'b';
+  var isMyTurn=pvpG.turn()===myC;
   var t='',c='color:#0ea5e9';
-  if(pvpG.in_checkmate()){t=my?'You lost! Checkmate.':'You win! Checkmate! 🏆';c=my?'color:#ef4444':'color:#4ade80';clearTurnTimer();}
+  if(pvpG.in_checkmate()){
+    t=isMyTurn?'You lost! Checkmate.':'You win! Checkmate! 🏆';
+    c=isMyTurn?'color:#ef4444':'color:#4ade80';
+    clearTurnTimer();
+    if(!isMyTurn){showPtsToast('+50 pts! PvP Win!');}
+  }
   else if(pvpG.in_draw()){t='Draw!';c='color:#fbbf24';clearTurnTimer();}
-  else if(pvpG.in_check()){t=my?'Check! Your turn':'Opponent in check!';}
-  else{t=my?'Your turn!':'Opponent\'s turn…';}
+  else if(pvpG.in_check()){t=isMyTurn?'⚠️ Check! Your turn':'Opponent in check!';}
+  else{t=isMyTurn?'Your turn!':'Opponent\'s turn…';}
   pvpSt(t,c);
+  // Start timer when it becomes our turn
+  if(!pvpG.game_over()&&isMyTurn&&!_timerInterval){pvpStartTimer();}
 }
-function pvpSt(t,c){var el=document.getElementById('pvp-status');el.textContent=t;el.style.cssText='font-weight:700;font-size:1.1rem;'+(c||'color:#0ea5e9');}
+function pvpSt(t,c){var el=document.getElementById('pvp-status');if(!el)return;el.textContent=t;el.style.cssText='font-weight:700;font-size:1.1rem;'+(c||'color:#0ea5e9');}
 function pvpUpdHst(){
-  var el=document.getElementById('pvp-history');
+  var el=document.getElementById('pvp-history');if(!el)return;
   if(!pvpHst.length){el.innerHTML='<p class="text-sm" style="color:#94a3b8">No moves yet</p>';return;}
   el.innerHTML=pvpHst.map(function(m,i){return '<div class="flex items-center gap-2 text-sm"><span class="text-xs w-6" style="color:#94a3b8">'+(Math.floor(i/2)+1)+(i%2===0?'.':'')+'</span><span class="font-mono font-semibold" style="color:'+(i%2===0?'#f0f4ff':'#0ea5e9')+'">'+m+'</span></div>';}).join('');
   el.scrollTop=el.scrollHeight;
@@ -1531,7 +1471,17 @@ function onPvPSq(sq){
   }else{
     if(sq===pvpSel){pvpSel=null;pvpPos=[];}
     else{
-      try{var r=pvpG.move({from:pvpSel,to:sq,promotion:'q'});if(r){clearTurnTimer();pvpHst.push(r.san);pvpSel=null;pvpPos=[];playSFX(r,pvpG);if(conn&&conn.open)conn.send({type:'move',move:r.san});pvpUpdSt();pvpUpdHst();renderPvPBoard();pvpStartTimer();return;}}catch(e){}
+      try{
+        var r=pvpG.move({from:pvpSel,to:sq,promotion:'q'});
+        if(r){
+          clearTurnTimer();
+          pvpHst.push(r.san);pvpSel=null;pvpPos=[];
+          playSFX(r,pvpG);
+          if(conn&&conn.open)conn.send({type:'move',move:r.san});
+          pvpUpdSt();pvpUpdHst();renderPvPBoard();
+          return;
+        }
+      }catch(e){}
       var p2=pvpG.get(sq);
       if(p2&&p2.color===myC){pvpSel=sq;pvpPos=pvpG.moves({square:sq,verbose:true}).map(function(m){return m.to;});}
       else{pvpSel=null;pvpPos=[];}
@@ -1540,17 +1490,24 @@ function onPvPSq(sq){
   renderPvPBoard();
 }
 
-function pvpReset(){
-  clearTurnTimer();
-  if(conn){try{conn.send({type:'resign'});}catch(e){}try{conn.close();}catch(e){}conn=null;}
-  if(peer){try{peer.destroy();}catch(e){}peer=null;}
-  pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];
-  var errEl=document.getElementById('pvp-err');if(errEl)errEl.classList.add('hidden');
+function pvpLeave(){
+  if(conn&&conn.open){try{conn.send({type:'resign'});}catch(e){}}
+  pvpReset();
+  pvpShowLobby();
 }
+
+function pvpReset(){
+  clearTimeout(_pvpInitTimeout);
+  clearTurnTimer();
+  if(conn){try{conn.close();}catch(e){}conn=null;}
+  if(peer){try{peer.destroy();}catch(e){}peer=null;}
+  pvpG=null;pvpSel=null;pvpPos=[];pvpHst=[];pvpRoom='';
+}
+
 function pvpShowErr(msg){
   var el=document.getElementById('pvp-err');
   if(el){
-    el.innerHTML=msg+'<br><span style="font-size:11px;opacity:.8">Tip: Both players must be on same network or use a stable internet connection.</span>';
+    el.innerHTML='⚠️ '+msg+'<br><span style="font-size:11px;opacity:.75;display:block;margin-top:4px">Tip: Both players must be connected to the internet. Firewalls or VPNs may block connections.</span>';
     el.classList.remove('hidden');
   }
 }
@@ -1570,7 +1527,7 @@ renderPoints();
     <img id="lb-img" src="" alt="Meme">
   </div>
   <button id="lb-next" onclick="lbStep(1)" aria-label="Next">›</button>
-  <div id="lb-counter" id="lb-counter"></div>
+  <div id="lb-counter"></div>
 </div>
 <script>
 (function(){
@@ -1588,40 +1545,11 @@ renderPoints();
   var ov=document.getElementById('lb-overlay');
   var im=document.getElementById('lb-img');
   var ct=document.getElementById('lb-counter');
-
-  window.lbOpen=function(idx){
-    cur=idx;
-    im.src=imgs[cur];
-    ct.textContent=(cur+1)+' / '+imgs.length;
-    ov.classList.add('open');
-    document.body.style.overflow='hidden';
-  };
-  window.lbClose=function(){
-    ov.classList.remove('open');
-    document.body.style.overflow='';
-    setTimeout(function(){im.src='';},300);
-  };
-  window.lbStep=function(dir){
-    cur=(cur+dir+imgs.length)%imgs.length;
-    im.style.opacity='0';
-    setTimeout(function(){
-      im.src=imgs[cur];
-      im.onload=function(){im.style.opacity='1';};
-      ct.textContent=(cur+1)+' / '+imgs.length;
-    },150);
-    im.style.transition='opacity .15s';
-  };
-
-  // Close on overlay click (outside image)
+  window.lbOpen=function(idx){cur=idx;im.src=imgs[cur];ct.textContent=(cur+1)+' / '+imgs.length;ov.classList.add('open');document.body.style.overflow='hidden';};
+  window.lbClose=function(){ov.classList.remove('open');document.body.style.overflow='';setTimeout(function(){im.src='';},300);};
+  window.lbStep=function(dir){cur=(cur+dir+imgs.length)%imgs.length;im.style.opacity='0';setTimeout(function(){im.src=imgs[cur];im.onload=function(){im.style.opacity='1';};ct.textContent=(cur+1)+' / '+imgs.length;},150);im.style.transition='opacity .15s';};
   ov.addEventListener('click',function(e){if(e.target===ov)lbClose();});
-
-  // Keyboard navigation
-  document.addEventListener('keydown',function(e){
-    if(!ov.classList.contains('open'))return;
-    if(e.key==='Escape')lbClose();
-    if(e.key==='ArrowLeft')lbStep(-1);
-    if(e.key==='ArrowRight')lbStep(1);
-  });
+  document.addEventListener('keydown',function(e){if(!ov.classList.contains('open'))return;if(e.key==='Escape')lbClose();if(e.key==='ArrowLeft')lbStep(-1);if(e.key==='ArrowRight')lbStep(1);});
 })();
 </script>
 
